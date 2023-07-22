@@ -42,22 +42,6 @@ namespace TestWord
 
         internal bool Process(Dictionary<string, string> items)
         {
-            
-            
-
-
-            //СОЗДАНИЕ И ЗАПОЛНЕНИЕ ТАБЛИЦЫ
-            var dt = new DataTable();
-            dt.Columns.Add(new DataColumn("Picture ID", typeof(int)));
-            dt.Columns.Add(new DataColumn("Title", typeof(string)));
-            dt.Columns.Add(new DataColumn("Date Added", typeof(DateTime)));
-            
-            DataRow dr = dt.NewRow();
-            dr["Picture ID"] = 1;
-            dr["Title"] = "Earth";
-            dr["Date Added"] = new DateTime();
-            dt.Rows.Add(dr);
-
             try
             {
                 Object file = _fileInfo.FullName;
@@ -89,17 +73,13 @@ namespace TestWord
                 {
                     app.Quit();
                 }
-
-                /*
-                //открытие сохраненного файла
-                if(pathMain!="")
-                    System.Diagnostics.Process.Start(new ProcessStartInfo(@pathMain) { UseShellExecute = true });*/
             }
             return false;
         }
 
         private void saveWord()
-        {   //путь и название будущего ФАЙЛА
+        {   
+            //путь и название будущего ФАЙЛА
             String name = DateTime.Now.ToString("dd-MM-yyyy HHmmss ") + _fileInfo.Name;
             String pathMain = "";
 
@@ -155,8 +135,10 @@ namespace TestWord
                     ReplaceWith: missing, Replace: replace);
             }
         }
+
         private void createTable1()
         {
+
             //СОЗДАНИЕ И ЗАПОЛНЕНИЕ ТАБЛИЦЫ
             var dt = new DataTable();
             dt.Columns.Add(new DataColumn("Picture ID", typeof(int)));
@@ -205,36 +187,18 @@ namespace TestWord
             dt2.Columns.Add(new DataColumn("Практические", typeof(string)));
             dt2.Columns.Add(new DataColumn("Лабораторные", typeof(string)));
             dt2.Columns.Add(new DataColumn("СРС", typeof(string)));
-            DataRow dr2 = dt2.NewRow();
 
-            /*
-            dr2["Номер"] = "№п/п";
-            dr2["Тема"] = "Тема дисциплины";
-            dr2["Семестр"] =  "семестр";
-            dr2["ВРЕМЯ"] = "2";
-            dr2["СРС"] = "4";*/
+            List<Table2Model> items = new List<Table2Model>();
+            items.Add(new Table2Model("Тема 1", 8, 1, 2, 3, 4));
+            items.Add(new Table2Model("Тема 2", 8, 5, 6, 7, 8));
+            items.Add(new Table2Model("Тема 3", 8, 9, 10, 11, 12));
 
-            dt2.Rows.Add(dr2);
-            dr2 = dt2.NewRow();
-
-            /*
-            dr2["Номер"] = "f";
-            dr2["Тема"] = "Тема 11. Основы метрологии";
-            dr2["Семестр"] = "4";
-            dr2["Лекции"] = "2";
-            dr2["Практические"] = "4";
-            dr2["Лабораторные"] = "4";
-            dr2["СРС"] = "4";*/
-
-            dt2.Rows.Add(dr2);
-            dr2 = dt2.NewRow();
-
-            /*
-             ....
-            */
-
-            dt2.Rows.Add(dr2);
-            dr2 = dt2.NewRow();
+            
+            for (int i = 0; i < items.Count+3; i++)
+            {
+                DataRow dr2 = dt2.NewRow();
+                dt2.Rows.Add(dr2);
+            }
 
             app.Selection.Find.Execute("<TABLE2>");
             Word.Range wordRange2 = app.Selection.Range;
@@ -243,35 +207,6 @@ namespace TestWord
                 dt2.Rows.Count, dt2.Columns.Count);
             wordTable2.Borders.Enable = 1;
 
-
-
-            //At this point, rng is at the start of the first (left-most) cell of the two
-            //using new objects for the split cells
-
-            //wordTable.Columns[1].Cells[1].Column.Cells.Borders.OutsideColor = WdColor.wdColorDarkRed;
-            //wordTable.Borders.InsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
-            //wordTable2.Borders.OutsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
-            //wordTable2.Borders.OutsideLineWidth = WdLineWidth.wdLineWidth225pt;
-            //..Borders.InsideColor = Word.WdColor.wdColorAqua;
-
-            for (var j = 0; j < dt2.Rows.Count; j++)
-            {
-                for (var k = 0; k < dt2.Columns.Count; k++)
-                {
-                    //wordTable2.Cell(j + 1, k + 1).Range.Text = dt2.Rows[j][k].ToString();
-                }
-            }
-
-            /*
-            Cell cell = wordTable2.Cell(1, 4);
-            Word.Range rng = cell.Range;
-            cell.Merge(wordTable2.Cell(1, 5));
-            cell.Merge(wordTable2.Cell(1, 5));
-            Word.Range rng2 = cell.Range;
-            Word.Cell newCel1 = rng2.Cells[1];
-            Word.Cell newCel2 = rng2.Next(1, 1).Cells[1];
-            newCel1.Range.Text = "Первый";
-            newCel2.Range.Text = "ВТОРОЙ";*/
 
             wordTable2.Cell(1, 4).Merge(wordTable2.Cell(1, 5));
             wordTable2.Cell(1, 4).Merge(wordTable2.Cell(1, 5));
@@ -291,6 +226,7 @@ namespace TestWord
             wordTable2.Cell(1, 5).Range.Orientation = WdTextOrientation.wdTextOrientationUpward;
             wordTable2.Cell(1, 5).VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
 
+            //объединение ячеек
             wordTable2.Cell(1, 1).Merge(wordTable2.Cell(2, 1));
             wordTable2.Cell(1, 2).Merge(wordTable2.Cell(2, 2));
             wordTable2.Cell(1, 3).Merge(wordTable2.Cell(2, 3));
@@ -313,30 +249,13 @@ namespace TestWord
             width_column7 = 1.18f * point;
 
 
+            //ширина, высоты столбцов
             wordTable2.Cell(1, 1).Width = width_column1;
             wordTable2.Cell(1, 2).Width = width_column2;
             wordTable2.Cell(1, 3).Width = width_column3;
             wordTable2.Cell(1, 4).Width = 4.84f * 28.35f;
             wordTable2.Cell(1, 5).Width = width_column7;
             wordTable2.Cell(1, 4).Height = 1.21f * 28.35f;
-            /*
-            wordTable2.Cell(1, 1).Width = 1.13f * 28.35f;
-            wordTable2.Cell(1, 2).Width = 7.83f * 28.35f;
-            wordTable2.Cell(1, 3).Width = 1.8f * 28.35f;
-            wordTable2.Cell(1, 4).Width = 4.84f * 28.35f;
-            wordTable2.Cell(1, 5).Width = 1.18f * 28.35f;
-            wordTable2.Cell(1, 4).Height = 1.21f * 28.35f;
-            */
-
-
-            /*
-
-            wordTable2.Columns[0].Width = 1.13f * 28.35f;
-            wordTable2.Columns[1].Width = 7.83f * 28.35f;
-            wordTable2.Columns[2].Width = 1.8f * 28.35f;
-            wordTable2.Columns[3].Width = 4.84f * 28.35f;
-            wordTable2.Columns[4].Width = 1.19f * 28.35f;
-            wordTable2.Rows[1].Height = 1.21f * 28.35f;*/
 
 
             wordTable2.Cell(2, 4).Range.Text = "Лекции";
@@ -351,48 +270,92 @@ namespace TestWord
             wordTable2.Cell(2, 6).Range.Orientation = WdTextOrientation.wdTextOrientationUpward;
             wordTable2.Cell(2, 6).VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
 
-
+            //ширина, высоты столбцов
             wordTable2.Cell(2, 4).Width = width_column4;
             wordTable2.Cell(2, 5).Width = width_column5;
             wordTable2.Cell(2, 6).Width = width_column6;
             wordTable2.Cell(2, 7).Width = width_column7;
-            /*
-            wordTable2.Cell(2, 4).Width = 1.51f * 28.35f;
-            wordTable2.Cell(2, 5).Width = 1.67f * 28.35f;
-            wordTable2.Cell(2, 6).Width = 1.66f * 28.35f;
-            wordTable2.Cell(2, 7).Width = 1.18f * 28.35f;
-            */
-
-
-
             wordTable2.Cell(2, 5).Height = 3.31f * 28.35f;
 
 
-            wordTable2.Cell(3, 1).Range.Text = "3.1";
-            wordTable2.Cell(3, 2).Range.Text = "3.2";
-            wordTable2.Cell(3, 3).Range.Text = "3.3";
-            wordTable2.Cell(3, 4).Range.Text = "3.4";
-            wordTable2.Cell(3, 5).Range.Text = "3.5";
-            wordTable2.Cell(3, 6).Range.Text = "3.6";
-            wordTable2.Cell(3, 7).Range.Text = "3.7";
+            int countItems = items.Count;
+
+            for (int i = 0; i < countItems; i++)
+            {
+                wordTable2.Cell(3 + i, 1).Range.Text = (i+1).ToString();
+                wordTable2.Cell(3 + i, 2).Range.Text = items[i].theme;
+                wordTable2.Cell(3 + i, 3).Range.Text = items[i].semester.ToString();
+                wordTable2.Cell(3 + i, 4).Range.Text = items[i].lecture_hour.ToString();
+                wordTable2.Cell(3 + i, 5).Range.Text = items[i].practical_hour.ToString();
+                wordTable2.Cell(3 + i, 6).Range.Text = items[i].laboratory_hour.ToString();
+                wordTable2.Cell(3 + i, 7).Range.Text = items[i].independent_hour.ToString();
+
+                wordTable2.Cell(3 + i, 1).Width = width_column1;
+                wordTable2.Cell(3 + i, 2).Width = width_column2;
+                wordTable2.Cell(3 + i, 3).Width = width_column3;
+                wordTable2.Cell(3 + i, 4).Width = width_column4;
+                wordTable2.Cell(3 + i, 5).Width = width_column5;
+                wordTable2.Cell(3 + i, 6).Width = width_column6;
+                wordTable2.Cell(3 + i, 7).Width = width_column7;
+            }
+
+            //последняя строка
+            wordTable2.Cell(3 + countItems, 1).Range.Text = "";
+            wordTable2.Cell(3 + countItems, 2).Range.Text = "Итого по дисциплине";
+            wordTable2.Cell(3 + countItems, 3).Range.Text = "";
+            wordTable2.Cell(3 + countItems, 4).Range.Text = "16";
+            wordTable2.Cell(3 + countItems, 5).Range.Text = "18";
+            wordTable2.Cell(3 + countItems, 6).Range.Text = "18";
+            wordTable2.Cell(3 + countItems, 7).Range.Text = "20";
+
+            wordTable2.Cell(3 + countItems, 1).Width = width_column1;
+            wordTable2.Cell(3 + countItems, 2).Width = width_column2;
+            wordTable2.Cell(3 + countItems, 3).Width = width_column3;
+            wordTable2.Cell(3 + countItems, 4).Width = width_column4;
+            wordTable2.Cell(3 + countItems, 5).Width = width_column5;
+            wordTable2.Cell(3 + countItems, 6).Width = width_column6;
+            wordTable2.Cell(3 + countItems, 7).Width = width_column7;
+
+            //форматирование текста
+            wordTable2.Cell(3 + countItems, 2).Range.Bold = Convert.ToInt32(true);
 
 
-
-            wordTable2.Cell(3, 1).Width = width_column1;
-            wordTable2.Cell(3, 2).Width = width_column2;
-            wordTable2.Cell(3, 3).Width = width_column3;
-            wordTable2.Cell(3, 4).Width = width_column4;
-            wordTable2.Cell(3, 5).Width = width_column5;
-            wordTable2.Cell(3, 6).Width = width_column6;
-            wordTable2.Cell(3, 7).Width = width_column7;
-
-
+            //форматирование таблицы
             wordTable2.Range.ParagraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
             wordTable2.Range.ParagraphFormat.SpaceBefore = 0;
             wordTable2.Range.ParagraphFormat.SpaceAfter = 0;
             wordTable2.Cell(1, 5).Merge(wordTable2.Cell(2, 7));
         }
+
+        private class Table2Model
+        {
+            public string theme { get; set; }
+            public int semester { get; set; }
+            public int lecture_hour { get; set; }
+            public int practical_hour { get; set; }
+            public int laboratory_hour { get; set; }
+            public int independent_hour { get; set; }
+
+            public Table2Model(string theme, int semester, 
+                int lecture_hour, int practical_hour, 
+                int laboratory_hour, int independent_hour)
+            {
+                this.theme = theme;
+                this.semester = semester;
+                this.lecture_hour = lecture_hour;
+                this.practical_hour = practical_hour;
+                this.laboratory_hour = laboratory_hour;
+                this.independent_hour = independent_hour;
+            }
+        }
+
+        private void createTable3()
+        {
+
+        }
+            
     }
 
+   
 
 }
