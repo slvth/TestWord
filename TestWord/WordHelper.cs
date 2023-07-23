@@ -1,22 +1,10 @@
-﻿using Microsoft.Office.Interop.Excel;
-using Microsoft.Office.Interop.Word;
-using Microsoft.Win32;
+﻿using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Shapes;
 using DataTable = System.Data.DataTable;
 using Word = Microsoft.Office.Interop.Word;
 
@@ -52,6 +40,7 @@ namespace TestWord
                 replaceText(items);
                 createTable1();
                 createTable2();
+                createTable3();
 
                 saveWord();
 
@@ -349,13 +338,218 @@ namespace TestWord
             }
         }
 
+        private class CompetenceModel
+        {
+            public string kod { get; set; }
+            public string name { get; set; }
+            public string know { get; set; }
+            public string able { get; set; }
+            public string own { get; set; }
+
+            public List<CompetenceModel> childs { get; set; }
+
+            public CompetenceModel(string kod, string name)
+            {
+                this.kod = kod;
+                this.name = name;
+            }
+
+            public CompetenceModel(string kod, string name, string know, string able, string own, List<CompetenceModel> childs)
+            {
+                this.kod = kod;
+                this.name = name;
+                this.know = know;
+                this.able = able;
+                this.own = own;
+                this.childs = childs;
+            }
+        }
+
         private void createTable3()
         {
+            var dt = new DataTable();
+            dt.Columns.Add(new DataColumn("Оцениваемые компетенции", typeof(string)));
+            dt.Columns.Add(new DataColumn("Код и наименование индикатора", typeof(string)));
+            dt.Columns.Add(new DataColumn("Результаты освоения", typeof(string)));
+            dt.Columns.Add(new DataColumn("Оценочные средства", typeof(string)));
 
-        }
+            //данные - код, имя, знать, уметь, владеть, индикаторы
+            List<CompetenceModel> competences = new List<CompetenceModel>();
+            competences.Add(new CompetenceModel("ОПК-11", 
+                "Способен проводить научные эксперименты с использованием современного исследовательского оборудования и приборов, оценивать результаты исследований",
+                "Фундаментальные физические законы, константы и эффекты, используемые при измерениях, физические ограничения точности измерений, международную систему единиц величин и основные теории размерностей",
+                "Применять методы и средства измерений для решения измерительных задач",
+                "Способами расчёта погрешностей измерений",
+                new List<CompetenceModel>(){
+                    new CompetenceModel("ОПК-11.1", "Знает фундаментальные физические законы, константы и эффекты, используемые при измерениях, физические ограничения точности измерений, международную систему единиц величин и основные теории размерностей"),
+                    new CompetenceModel("ОПК-11.3", "Умеет применять методы и средства измерений для решения измерительных задач"),
+                    new CompetenceModel("ОПК-11.4", "Владеет навыками работы  используемых средств измерения и контроля технологических процессов и   способами расчёта погрешностей измерений"),
+                }
+                ));
+
+            for (int i = 0; i < competences.Count + 1; i++)
+            {
+                DataRow dr = dt.NewRow();
+                dt.Rows.Add(dr);
+            }
+
+            app.Selection.Find.Execute("<TABLE3>");
+            Word.Range wordRange = app.Selection.Range;
+
+            var wordTable = wordDocument.Tables.Add(wordRange,
+                dt.Rows.Count, dt.Columns.Count);
             
+
+            wordTable.Cell(1, 1).Range.Text = "Оцениваемые компетенции (код, наименование)";
+            wordTable.Cell(1, 2).Range.Text = "Код и наименование индикатора (индикаторов) достижения компетенции";
+            wordTable.Cell(1, 3).Range.Text = "Результаты освоения компетенции";
+            wordTable.Cell(1, 4).Range.Text = "Оценочные средства текущего контроля и промежуточной аттестации";
+
+            //заполнение данными
+            for (int i = 0;i < competences.Count;i++)
+            {
+                CompetenceModel item = competences[i];
+                string kod = item.kod; 
+                string name = item.name;
+                string know = item.know;
+                string able = item.able;
+                string own = item.own;
+                List<CompetenceModel> childs = item.childs;
+
+                //Столбец1
+                Word.Range range = wordTable.Cell(2+i, 1).Range;
+                range.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range.InsertAfter(kod);
+                range.Font.Bold = Convert.ToInt32(true);
+                range.InsertParagraphAfter();
+                range.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+                range.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range.InsertAfter(name);
+                range.Font.Bold = Convert.ToInt32(false);
+                range.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                //Столбец2
+                Word.Range range2 = wordTable.Cell(2 + i, 2).Range;
+                for (int j = 0; j < childs.Count; j++)
+                {
+                    CompetenceModel child = childs[j];
+                    string kod_child = child.kod;
+                    string name_child = child.name;
+
+                    range2.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                    range2.InsertAfter(kod_child+".");
+                    range2.Font.Bold = Convert.ToInt32(true);
+                    range2.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+                    range2.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+
+                    if (j == childs.Count - 1)
+                    {
+                        range2.InsertAfter(" "+name_child + ".");
+                    }
+                    else
+                    {
+                        range2.InsertAfter(" "+name_child + ";");
+                        range2.InsertParagraphAfter();
+                    }
+                    range2.Font.Bold = Convert.ToInt32(false);
+                    range2.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+                }
+
+                //Столбец3
+                Word.Range range3 = wordTable.Cell(2 + i, 3).Range;
+                //знать
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range3.InsertAfter("Знать:");
+                range3.Font.Bold = Convert.ToInt32(true);
+                range3.InsertParagraphAfter();
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range3.InsertAfter(know.ToLower() + ";");
+                range3.Font.Bold = Convert.ToInt32(false);
+                range3.InsertParagraphAfter();
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                //уметь
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range3.InsertAfter("Уметь:");
+                range3.Font.Bold = Convert.ToInt32(true);
+                range3.InsertParagraphAfter();
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+                
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range3.InsertAfter(able.ToLower() + ";");
+                range3.Font.Bold = Convert.ToInt32(false);
+                range3.InsertParagraphAfter();
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                //владеть
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range3.InsertAfter("Владеть:");
+                range3.Font.Bold = Convert.ToInt32(true);
+                range3.InsertParagraphAfter();
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range3.InsertAfter(own.ToLower() + ".");
+                range3.Font.Bold = Convert.ToInt32(false);
+                range3.InsertParagraphAfter();
+                range3.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+
+                //!!!!!!!!!!!!!!!!ДОРАБОТАТЬ - данные брать из excel или программы
+                //Столбец4
+                Word.Range range4 = wordTable.Cell(2 + i, 4).Range;
+                //текущий контроль
+                range4.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range4.InsertAfter("Текущий контроль:");
+                range4.Font.Bold = Convert.ToInt32(true);
+                range4.InsertParagraphAfter();
+                range4.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                range4.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range4.InsertAfter("Компьютерное тестирование по теме 1-5\nПрактические задачи по темам 1-5\nЛабораторные работыпо темам 1-3"); //!!!!!
+                range4.Font.Bold = Convert.ToInt32(false);
+                range4.InsertParagraphAfter();
+                range4.InsertParagraphAfter();
+                range4.InsertParagraphAfter();
+                range4.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                //промежуточная аттестация
+                range4.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range4.InsertAfter("Промежуточная аттестация:");
+                range4.Font.Bold = Convert.ToInt32(true);
+                range4.InsertParagraphAfter();
+                range4.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                range4.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range4.InsertAfter("Экзамен"); //!!!!!
+                range4.Font.Bold = Convert.ToInt32(false);
+                range4.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+            }
+
+            float width_column1, width_column2, width_column3,
+                width_column4, point;
+
+
+            //форматирование таблицы
+            wordTable.Borders.Enable = 1;
+            wordTable.Range.ParagraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
+            wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+            wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+            wordTable.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+
+            wordTable.Cell(1, 1).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+            wordTable.Cell(1, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+            wordTable.Cell(1, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+            wordTable.Cell(1, 4).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+
+            wordTable.Cell(1, 1).Range.Bold = Convert.ToInt32(true);
+            wordTable.Cell(1, 2).Range.Bold = Convert.ToInt32(true);
+            wordTable.Cell(1, 3).Range.Bold = Convert.ToInt32(true);
+            wordTable.Cell(1, 4).Range.Bold = Convert.ToInt32(true);
+        }
+
     }
-
-   
-
 }
