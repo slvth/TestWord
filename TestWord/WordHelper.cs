@@ -16,6 +16,10 @@ namespace TestWord
         private Word.Application app;
         private Word._Document wordDocument;
 
+        //данные
+        DisciplineModel discipline;
+        List<ThemeModel> themes;
+
         public WordHelper(string fileName)
         {
             if (File.Exists(fileName))
@@ -37,10 +41,12 @@ namespace TestWord
                 app = new Word.Application();
                 wordDocument = app.Documents.Open(file, ReadOnly: false);
 
+                getData();
                 replaceText(items);
                 createTable1();
                 createTable2();
                 createTable3();
+                createTable4();
 
                 saveWord();
 
@@ -65,6 +71,204 @@ namespace TestWord
             }
             return false;
         }
+
+        private void getData()
+        {
+            themes = new List<ThemeModel>() {
+                new ThemeModel("Тема 1. Основы метрологии", 8, 1, 2, 3, 4,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("История развития метрологии", 2, ""),
+                    },
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Измерение линейных размеров с помощью штангенинструментов", 2, ""),
+                        new ChildThemeModel("Электрические измерения напряжения", 2, ""),
+                    },
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Системы физических единиц", 2, ""),
+                        new ChildThemeModel("Размерность физических единиц", 2, "")
+                    }
+                ),
+                new ThemeModel("Тема 2. Средства и методы измерения", 8, 5, 6, 7, 8,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Виды и методы измерений", 2, "Проблемная лекция"),
+                        new ChildThemeModel("Средства измерений", 2, "Лекция с запланированными ошибками"),
+                    },
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Поверка СИ температуры", 2, ""),
+                        new ChildThemeModel("Проверка средств измерения давления", 2, ""),
+                        new ChildThemeModel("Аттестация средств измерения давления", 2, ""),
+                    },
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Температурные шкалы", 2, ""),
+                        new ChildThemeModel("Метрологические характеристики средств измерения", 2, "работа в малых группах")
+                    }
+                ),
+                new ThemeModel("Тема 3. Погрешности измерения", 8, 9, 10, 11, 12,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Основы метрологического обеспечения производства", 2, ""),
+                        new ChildThemeModel("Понятие о погрешности измерений", 2, ""),
+                    },
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Определение метрологических характеристик средств измерения", 2, ""),
+                        new ChildThemeModel("Влияние газового фактора на точность измерений", 2, ""),
+                        new ChildThemeModel("Определение погрешностей СИ при изменении характеристики среды", 2, ""),
+                        new ChildThemeModel("Влияние не стабильности потока на точность измерения", 2, ""),
+                    },
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Определение погрешностей измерения", 2, "групповое обсуждение"),
+                        new ChildThemeModel("Погрешности косвенных измерений", 2, ""),
+                        new ChildThemeModel("Определение доверительных границ и доверительных интервалов", 2, "работа в малых группах"),
+                    }
+                ),
+                new ThemeModel("Тема 4. Основы стандартизации", 8, 13, 14, 15, 16,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("История развития стандартизации", 2, "Лекция-визуализация"),
+                        new ChildThemeModel("Методы и средства стандартизации", 2, ""),
+                    },
+                    null,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Нормативно-правовые документы по стандартизации", 2, ""),
+                    }
+                ),
+                new ThemeModel("Тема 5. Основы сертификации", 8, 17, 18, 19, 20,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Основные понятия сертификации", 2, ""),
+                    },
+                    null,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Сходства и отличия «Сертификация соответствия» и «Декларирование соответствия»", 2, ""),
+                    }
+                ),
+            };
+
+            List<int> semesters = new List<int>() { 4 };
+            int total_lecture_hour = 16;
+            int total_practical_hour = 18;
+            int total_laboratory_hour = 18;
+            int total_independent_hour = 20;
+
+            discipline = new DisciplineModel(
+                semesters,
+                total_lecture_hour,
+                total_laboratory_hour,
+                total_practical_hour,
+                total_independent_hour,
+                themes
+                );
+        }
+
+        private class DisciplineModel
+        {
+            public List<int> semesters { get; set; }
+
+            public int total_lecture_hour { get; set; }
+            public int total_practical_hour { get; set; }
+            public int total_laboratory_hour { get; set; }
+            public int total_independent_hour { get; set; }
+            public List<ThemeModel> themes { get; set; }
+
+            public DisciplineModel(
+                List<int> semesters, 
+                int total_lecture_hour,
+                int total_laboratory_hour,
+                int total_practical_hour, 
+                int total_independent_hour, 
+                List<ThemeModel> themes)
+            {
+                this.semesters = semesters;
+                this.total_lecture_hour = total_lecture_hour;
+                this.total_laboratory_hour = total_laboratory_hour;
+                this.total_practical_hour = total_practical_hour;
+                this.total_independent_hour = total_independent_hour;
+                this.themes = themes;
+            }
+        }
+
+        private class ThemeModel
+        {
+            public string theme { get; set; }
+            public int semester { get; set; }
+            public int lecture_hour { get; set; }
+            public int practical_hour { get; set; }
+            public int laboratory_hour { get; set; }
+            public int independent_hour { get; set; }
+
+            public List<ChildThemeModel>? lectures { get; set; }
+            public List<ChildThemeModel>? practicals { get; set; }
+            public List<ChildThemeModel>? laboratories { get; set; }
+
+            public ThemeModel(string theme, int semester,
+                int lecture_hour, int practical_hour,
+                int laboratory_hour, int independent_hour)
+            {
+                this.theme = theme;
+                this.semester = semester;
+                this.lecture_hour = lecture_hour;
+                this.practical_hour = practical_hour;
+                this.laboratory_hour = laboratory_hour;
+                this.independent_hour = independent_hour;
+            }
+
+            public ThemeModel(string theme, int semester,
+                int lecture_hour, int practical_hour,
+                int laboratory_hour, int independent_hour, 
+                List<ChildThemeModel>? lectures, 
+                List<ChildThemeModel>? laboratories, 
+                List<ChildThemeModel>? practicals)
+            {
+                this.theme = theme;
+                this.semester = semester;
+                this.lecture_hour = lecture_hour;
+                this.practical_hour = practical_hour;
+                this.laboratory_hour = laboratory_hour;
+                this.independent_hour = independent_hour;
+                this.lectures = lectures;
+                this.laboratories = laboratories;
+                this.practicals = practicals;
+            }
+        }
+
+        private class ChildThemeModel
+        {
+            public string name { get; set; }
+            public int hour { get; set; }
+            public string method { get; set; }
+
+            public ChildThemeModel(string name, int hour, string method)
+            {
+                this.name = name;
+                this.hour = hour;
+                this.method = method;
+            }
+        }
+
+        private class CompetenceModel
+        {
+            public string kod { get; set; }
+            public string name { get; set; }
+            public string? know { get; set; }
+            public string? able { get; set; }
+            public string? own { get; set; }
+
+            public List<CompetenceModel>? childs { get; set; }
+
+            public CompetenceModel(string kod, string name)
+            {
+                this.kod = kod;
+                this.name = name;
+            }
+
+            public CompetenceModel(string kod, string name, string know, string able, string own, List<CompetenceModel> childs)
+            {
+                this.kod = kod;
+                this.name = name;
+                this.know = know;
+                this.able = able;
+                this.own = own;
+                this.childs = childs;
+            }
+        }
+
 
         private void saveWord()
         {   
@@ -127,7 +331,6 @@ namespace TestWord
 
         private void createTable1()
         {
-
             //СОЗДАНИЕ И ЗАПОЛНЕНИЕ ТАБЛИЦЫ
             var dt = new DataTable();
             dt.Columns.Add(new DataColumn("Picture ID", typeof(int)));
@@ -177,13 +380,92 @@ namespace TestWord
             dt2.Columns.Add(new DataColumn("Лабораторные", typeof(string)));
             dt2.Columns.Add(new DataColumn("СРС", typeof(string)));
 
-            List<Table2Model> items = new List<Table2Model>();
-            items.Add(new Table2Model("Тема 1", 8, 1, 2, 3, 4));
-            items.Add(new Table2Model("Тема 2", 8, 5, 6, 7, 8));
-            items.Add(new Table2Model("Тема 3", 8, 9, 10, 11, 12));
-
             
-            for (int i = 0; i < items.Count+3; i++)
+
+            List<ThemeModel> themes = new List<ThemeModel>() {
+                new ThemeModel("Тема 1. Основы метрологии", 8, 1, 2, 3, 4, 
+                    new List<ChildThemeModel> { 
+                        new ChildThemeModel("История развития метрологии", 2, ""),
+                    },
+                    new List<ChildThemeModel> { 
+                        new ChildThemeModel("Измерение линейных размеров с помощью штангенинструментов", 2, ""), 
+                        new ChildThemeModel("Электрические измерения напряжения", 2, ""),
+                    },
+                    new List<ChildThemeModel> { 
+                        new ChildThemeModel("Системы физических единиц", 2, ""), 
+                        new ChildThemeModel("Размерность физических единиц", 2, "") 
+                    }
+                ),
+                new ThemeModel("Тема 2. Средства и методы измерения", 8, 5, 6, 7, 8,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Виды и методы измерений", 2, "Проблемная лекция"),
+                        new ChildThemeModel("Средства измерений", 2, "Лекция с запланированными ошибками"),
+                    },
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Поверка СИ температуры", 2, ""),
+                        new ChildThemeModel("Проверка средств измерения давления", 2, ""),
+                        new ChildThemeModel("Аттестация средств измерения давления", 2, ""),
+                    },
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Температурные шкалы", 2, ""),
+                        new ChildThemeModel("Метрологические характеристики средств измерения", 2, "работа в малых группах")
+                    }
+                ),
+                new ThemeModel("Тема 3. Погрешности измерения", 8, 9, 10, 11, 12,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Основы метрологического обеспечения производства", 2, ""),
+                        new ChildThemeModel("Понятие о погрешности измерений", 2, ""),
+                    },
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Определение метрологических характеристик средств измерения", 2, ""),
+                        new ChildThemeModel("Влияние газового фактора на точность измерений", 2, ""),
+                        new ChildThemeModel("Определение погрешностей СИ при изменении характеристики среды", 2, ""),
+                        new ChildThemeModel("Влияние не стабильности потока на точность измерения", 2, ""),
+                    },
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Определение погрешностей измерения", 2, "групповое обсуждение"),
+                        new ChildThemeModel("Погрешности косвенных измерений", 2, ""),
+                        new ChildThemeModel("Определение доверительных границ и доверительных интервалов", 2, "работа в малых группах"),
+                    }
+                ),
+                new ThemeModel("Тема 4. Основы стандартизации", 8, 13, 14, 15, 16,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("История развития стандартизации", 2, "Лекция-визуализация"),
+                        new ChildThemeModel("Методы и средства стандартизации", 2, ""),
+                    },
+                    null,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Нормативно-правовые документы по стандартизации", 2, ""),
+                    }
+                ),
+                new ThemeModel("Тема 5. Основы сертификации", 8, 17, 18, 19, 20,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Основные понятия сертификации", 2, ""),
+                    },
+                    null,
+                    new List<ChildThemeModel> {
+                        new ChildThemeModel("Сходства и отличия «Сертификация соответствия» и «Декларирование соответствия»", 2, ""),
+                    }
+                ),
+            };
+            List<int> semesters = new List<int>() { 4 };
+            int total_lecture_hour = 16;
+            int total_practical_hour = 18;
+            int total_laboratory_hour = 18;
+            int total_independent_hour = 20;
+
+            DisciplineModel discipline = new DisciplineModel(
+                semesters, 
+                total_lecture_hour, 
+                total_laboratory_hour, 
+                total_practical_hour, 
+                total_independent_hour, 
+                themes
+                );
+
+
+
+            for (int i = 0; i < themes.Count+3; i++)
             {
                 DataRow dr2 = dt2.NewRow();
                 dt2.Rows.Add(dr2);
@@ -267,17 +549,17 @@ namespace TestWord
             wordTable2.Cell(2, 5).Height = 3.31f * 28.35f;
 
 
-            int countItems = items.Count;
+            int countItems = themes.Count;
 
             for (int i = 0; i < countItems; i++)
             {
                 wordTable2.Cell(3 + i, 1).Range.Text = (i+1).ToString();
-                wordTable2.Cell(3 + i, 2).Range.Text = items[i].theme;
-                wordTable2.Cell(3 + i, 3).Range.Text = items[i].semester.ToString();
-                wordTable2.Cell(3 + i, 4).Range.Text = items[i].lecture_hour.ToString();
-                wordTable2.Cell(3 + i, 5).Range.Text = items[i].practical_hour.ToString();
-                wordTable2.Cell(3 + i, 6).Range.Text = items[i].laboratory_hour.ToString();
-                wordTable2.Cell(3 + i, 7).Range.Text = items[i].independent_hour.ToString();
+                wordTable2.Cell(3 + i, 2).Range.Text = themes[i].theme;
+                wordTable2.Cell(3 + i, 3).Range.Text = themes[i].semester.ToString();
+                wordTable2.Cell(3 + i, 4).Range.Text = themes[i].lecture_hour.ToString();
+                wordTable2.Cell(3 + i, 5).Range.Text = themes[i].practical_hour.ToString();
+                wordTable2.Cell(3 + i, 6).Range.Text = themes[i].laboratory_hour.ToString();
+                wordTable2.Cell(3 + i, 7).Range.Text = themes[i].independent_hour.ToString();
 
                 wordTable2.Cell(3 + i, 1).Width = width_column1;
                 wordTable2.Cell(3 + i, 2).Width = width_column2;
@@ -286,6 +568,9 @@ namespace TestWord
                 wordTable2.Cell(3 + i, 5).Width = width_column5;
                 wordTable2.Cell(3 + i, 6).Width = width_column6;
                 wordTable2.Cell(3 + i, 7).Width = width_column7;
+
+                //выравнивание=слева
+                wordTable2.Cell(3 + i, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
             }
 
             //последняя строка
@@ -316,54 +601,7 @@ namespace TestWord
             wordTable2.Cell(1, 5).Merge(wordTable2.Cell(2, 7));
         }
 
-        private class Table2Model
-        {
-            public string theme { get; set; }
-            public int semester { get; set; }
-            public int lecture_hour { get; set; }
-            public int practical_hour { get; set; }
-            public int laboratory_hour { get; set; }
-            public int independent_hour { get; set; }
 
-            public Table2Model(string theme, int semester, 
-                int lecture_hour, int practical_hour, 
-                int laboratory_hour, int independent_hour)
-            {
-                this.theme = theme;
-                this.semester = semester;
-                this.lecture_hour = lecture_hour;
-                this.practical_hour = practical_hour;
-                this.laboratory_hour = laboratory_hour;
-                this.independent_hour = independent_hour;
-            }
-        }
-
-        private class CompetenceModel
-        {
-            public string kod { get; set; }
-            public string name { get; set; }
-            public string know { get; set; }
-            public string able { get; set; }
-            public string own { get; set; }
-
-            public List<CompetenceModel> childs { get; set; }
-
-            public CompetenceModel(string kod, string name)
-            {
-                this.kod = kod;
-                this.name = name;
-            }
-
-            public CompetenceModel(string kod, string name, string know, string able, string own, List<CompetenceModel> childs)
-            {
-                this.kod = kod;
-                this.name = name;
-                this.know = know;
-                this.able = able;
-                this.own = own;
-                this.childs = childs;
-            }
-        }
 
         private void createTable3()
         {
@@ -549,6 +787,64 @@ namespace TestWord
             wordTable.Cell(1, 2).Range.Bold = Convert.ToInt32(true);
             wordTable.Cell(1, 3).Range.Bold = Convert.ToInt32(true);
             wordTable.Cell(1, 4).Range.Bold = Convert.ToInt32(true);
+        }
+
+        private void createTable4()
+        {
+            var dt = new DataTable();
+            dt.Columns.Add(new DataColumn("Тема", typeof(string)));
+            dt.Columns.Add(new DataColumn("Кол-во часов", typeof(string)));
+            dt.Columns.Add(new DataColumn("Используемый метод", typeof(string)));
+            dt.Columns.Add(new DataColumn("Формируемые компетенции", typeof(string)));
+
+            int count_theme = discipline.themes.Count;
+            int count_module = 2*discipline.semesters.Count;
+
+            //данные - код, имя, знать, уметь, владеть, индикаторы
+            for (int i = 0; i < count_theme + count_module; i++)
+            {
+                DataRow dr = dt.NewRow();
+                dt.Rows.Add(dr);
+            }
+
+            app.Selection.Find.Execute("<TABLE4>");
+            Word.Range wordRange = app.Selection.Range;
+
+            var wordTable = wordDocument.Tables.Add(wordRange,
+                dt.Rows.Count, dt.Columns.Count);
+
+
+            wordTable.Cell(1, 1).Range.Text = "Оцениваемые компетенции (код, наименование)";
+            wordTable.Cell(1, 2).Range.Text = "Код и наименование индикатора (индикаторов) достижения компетенции";
+            wordTable.Cell(1, 3).Range.Text = "Результаты освоения компетенции";
+            wordTable.Cell(1, 4).Range.Text = "Оценочные средства текущего контроля и промежуточной аттестации";
+
+            //заполнение данными
+            for (int i = 0; i < competences.Count; i++)
+            {
+                CompetenceModel item = competences[i];
+                string kod = item.kod;
+                string name = item.name;
+                string know = item.know;
+                string able = item.able;
+                string own = item.own;
+                List<CompetenceModel> childs = item.childs;
+
+                //Столбец1
+                Word.Range range = wordTable.Cell(2 + i, 1).Range;
+                range.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range.InsertAfter(kod);
+                range.Font.Bold = Convert.ToInt32(true);
+                range.InsertParagraphAfter();
+                range.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+                range.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range.InsertAfter(name);
+                range.Font.Bold = Convert.ToInt32(false);
+                range.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+            }
+
+
         }
 
     }
