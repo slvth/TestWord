@@ -1,10 +1,12 @@
-﻿using Microsoft.Office.Interop.Word;
+﻿using Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using DataTable = System.Data.DataTable;
 using Word = Microsoft.Office.Interop.Word;
@@ -41,6 +43,7 @@ namespace TestWord
 
                 app = new Word.Application();
                 wordDocument = app.Documents.Open(file, ReadOnly: false);
+                //wordDocument = app.Documents.Open(file, ReadOnly: false);
 
                 getData();
                 replaceText(items);
@@ -49,6 +52,7 @@ namespace TestWord
                 createTable3();
                 createTable4();
                 createTable5();
+                createTable6();
 
                 saveWord();
 
@@ -102,7 +106,9 @@ namespace TestWord
             };
 
             //данные - код, имя, знать, уметь, владеть, индикаторы
-            List <CompetenceModel> competences = new List<CompetenceModel>(){
+            //1 Перечень планируемых результатов обучения по дисциплине
+            //6.2 Уровень освоения компетенций и критерии оценивания результатов обучения
+            List<CompetenceModel> competences = new List<CompetenceModel>(){
                 new CompetenceModel("ОПК-11",
                     "Способен проводить научные эксперименты с использованием современного исследовательского оборудования и приборов, оценивать результаты исследований",
                     "Фундаментальные физические законы, константы и эффекты, используемые при измерениях, физические ограничения точности измерений, международную систему единиц величин и основные теории размерностей",
@@ -112,7 +118,28 @@ namespace TestWord
                         new CompetenceModel("ОПК-11.1", "Знает фундаментальные физические законы, константы и эффекты, используемые при измерениях, физические ограничения точности измерений, международную систему единиц величин и основные теории размерностей"),
                         new CompetenceModel("ОПК-11.3", "Умеет применять методы и средства измерений для решения измерительных задач"),
                         new CompetenceModel("ОПК-11.4", "Владеет навыками работы  используемых средств измерения и контроля технологических процессов и   способами расчёта погрешностей измерений"),
-                }),
+                    },
+                    new List<ResultDescModel>(){
+                        //знать 5,4,3,2
+                        new ResultDescModel(
+                            "Сформированные систематические представления об фундаментальных физических законах, константах и эффектах, используемых при измерениях, физических ограничениях точности измерений, международной системе единиц величин и основных теориях размерностей",
+                            "Сформированные, но содержащие отдельные пробелы представления об фундаментальных физических законах, константах и эффектах, используемых при измерениях, физических ограничениях точности измерений, международной системе единиц величин и основных теориях размерностей",
+                            "Неполные представления об фундаментальных физических законах, константах и эффектах, используемых при измерениях, физических ограничениях точности измерений, международной системе единиц величин и основных теориях размерностей",
+                            "Фрагментарные представления об фундаментальных физических законах, константах и эффектах, используемых при измерениях, физических ограничениях точности измерений, международной системе единиц величин и основных теориях размерностей"),
+                        //уметь 5,4,3,2
+                        new ResultDescModel(
+                            "Сформированное умение применять методы и средства измерений для решения измерительных задач",
+                            "В целом успешное, но содержащее отдельные пробелы умение применять методы и средства измерений для решения измерительных задач",
+                            "В целом успешное, но не систематическое умение применять методы и средства измерений для решения измерительных задач",
+                            "Фрагментарное умение применять методы и средства измерений для решения измерительных задач"),
+                        //владеть 5,4,3,2
+                        new ResultDescModel(
+                            "Успешное и систематическое владение способами расчёта погрешностей измерений",
+                            "В целом успешное, но содержащее отдельные пробелы владение способами расчёта погрешностей измерений",
+                            "В целом успешное, но не систематическое владение способами расчёта погрешностей измерений",
+                            "Фрагментарное владение способами расчёта погрешностей измерений")
+                    }
+                ),
                 new CompetenceModel("ОПК-12",
                     "Способен проводить научные эксперименты с использованием современного исследовательского оборудования и приборов, оценивать результаты исследований",
                     "Фундаментальные физические законы, константы и эффекты, используемые при измерениях, физические ограничения точности измерений, международную систему единиц величин и основные теории размерностей",
@@ -122,7 +149,28 @@ namespace TestWord
                         new CompetenceModel("ОПК-12.1", "Знает фундаментальные физические законы, константы и эффекты, используемые при измерениях, физические ограничения точности измерений, международную систему единиц величин и основные теории размерностей"),
                         new CompetenceModel("ОПК-12.3", "Умеет применять методы и средства измерений для решения измерительных задач"),
                         new CompetenceModel("ОПК-12.4", "Владеет навыками работы  используемых средств измерения и контроля технологических процессов и   способами расчёта погрешностей измерений"),
-                }),
+                    },
+                    new List<ResultDescModel>(){
+                        //знать 5,4,3,2
+                        new ResultDescModel(
+                            "Сформированные систематические представления об фундаментальных физических законах, константах и эффектах, используемых при измерениях, физических ограничениях точности измерений, международной системе единиц величин и основных теориях размерностей",
+                            "Сформированные, но содержащие отдельные пробелы представления об фундаментальных физических законах, константах и эффектах, используемых при измерениях, физических ограничениях точности измерений, международной системе единиц величин и основных теориях размерностей",
+                            "Неполные представления об фундаментальных физических законах, константах и эффектах, используемых при измерениях, физических ограничениях точности измерений, международной системе единиц величин и основных теориях размерностей",
+                            "Фрагментарные представления об фундаментальных физических законах, константах и эффектах, используемых при измерениях, физических ограничениях точности измерений, международной системе единиц величин и основных теориях размерностей"),
+                        //уметь 5,4,3,2
+                        new ResultDescModel(
+                            "Сформированное умение применять методы и средства измерений для решения измерительных задач",
+                            "В целом успешное, но содержащее отдельные пробелы умение применять методы и средства измерений для решения измерительных задач",
+                            "В целом успешное, но не систематическое умение применять методы и средства измерений для решения измерительных задач",
+                            "Фрагментарное умение применять методы и средства измерений для решения измерительных задач"),
+                        //владеть 5,4,3,2
+                        new ResultDescModel(
+                            "Успешное и систематическое владение способами расчёта погрешностей измерений",
+                            "В целом успешное, но содержащее отдельные пробелы владение способами расчёта погрешностей измерений",
+                            "В целом успешное, но не систематическое владение способами расчёта погрешностей измерений",
+                            "Фрагментарное владение способами расчёта погрешностей измерений")
+                    }
+                ),
             };
 
             themes = new List<ThemeModel>() {
@@ -321,21 +369,23 @@ namespace TestWord
 
         private class CompetenceModel
         {
-            public string kod { get; set; }
+            public string kod { get; set; } //компетенция, например ОПК11
             public string name { get; set; }
+
             public string? know { get; set; }
             public string? able { get; set; }
             public string? own { get; set; }
 
-            public List<CompetenceModel>? childs { get; set; }
+            public List<CompetenceModel>? childs { get; set; } //индикаторы, например ОПК11.1, ОПК11.2
+            public List<ResultDescModel>? results { get; set; } //6.2 знать, уметь, владеть описание по оценкам 
 
-            public CompetenceModel(string kod, string name)
+            public CompetenceModel(string kod, string name) //для индикаторов
             {
                 this.kod = kod;
                 this.name = name;
             }
 
-            public CompetenceModel(string kod, string name, string know, string able, string own, List<CompetenceModel> childs)
+            public CompetenceModel(string kod, string name, string know, string able, string own, List<CompetenceModel> childs, List<ResultDescModel> results)
             {
                 this.kod = kod;
                 this.name = name;
@@ -343,6 +393,23 @@ namespace TestWord
                 this.able = able;
                 this.own = own;
                 this.childs = childs;
+                this.results = results;
+            }
+        }
+
+        private class ResultDescModel
+        {
+            public string result5 { get; set; }
+            public string result4 { get; set; }
+            public string result3 { get; set; }
+            public string result2 { get; set; }
+
+            public ResultDescModel(string result5, string result4, string result3, string result2)
+            {
+                this.result5 = result5;
+                this.result4 = result4;
+                this.result3 = result3;
+                this.result2 = result2;
             }
         }
 
@@ -916,8 +983,7 @@ namespace TestWord
 
             int total_hour = hour_lecture + hour_lab + hour_practical;
 
-            wordTable.Cell(current_row, 1).Range.Text = 
-                $"Тема {i + 1}. {discipline.themes[i].theme} ({total_hour} ч.)";
+            wordTable.Cell(current_row, 1).Range.Text = $"Тема {i + 1}. {discipline.themes[i].theme} ({total_hour} ч.)";
             wordTable.Cell(current_row, 1).Merge(wordTable.Cell(current_row, 4));
             //форматирование
             wordTable.Cell(current_row, 1).Range.Bold = Convert.ToInt32(true);
@@ -1081,6 +1147,197 @@ namespace TestWord
             wordTable.Borders.Enable = Convert.ToInt32(true);
             wordTable.Range.ParagraphFormat.SpaceBefore = 0;
             wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+            wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
+        }
+
+        //6.2 Уровень освоения компетенции и критерии оценивания результатов обучения
+        private void createTable6()
+        {
+            List<CompetenceModel> competences = discipline.competences;
+
+
+            var dt = new DataTable();
+            dt.Columns.Add("номер");
+            dt.Columns.Add("код");
+            dt.Columns.Add("индикатор");
+            dt.Columns.Add("результаты");
+            dt.Columns.Add("продвинутый");
+            dt.Columns.Add("средний");
+            dt.Columns.Add("базовый");
+            dt.Columns.Add("компетенции не освоены");
+
+            for (int i = 1; i <= (competences.Count * 3)+4; i++)
+                dt.Rows.Add();
+
+            app.Selection.Find.Execute("<TABLE6>");
+            Word.Range wordRange = app.Selection.Range;
+            var wordTable = wordDocument.Tables.Add(wordRange, dt.Rows.Count, dt.Columns.Count);
+            //форматирование
+            wordTable.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+            for (int i = 1; i <= 4; i++)
+                for (int j = 1; j <= wordTable.Columns.Count; j++)
+                {
+                    wordTable.Cell(i, j).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    wordTable.Cell(i, j).Range.Bold = Convert.ToInt32(true);
+                }
+
+            //шапка таблицы
+            //строка1
+            wordTable.Cell(1, 1).Range.Text = "№ п/п";
+            wordTable.Cell(1, 2).Range.Text = "Оцениваемые компетенции (код, наименование)";
+            wordTable.Cell(1, 3).Range.Text = "Код и наименование индикатора (индикаторов) достижения компетенции";
+            wordTable.Cell(1, 4).Range.Text = "Планируемые результаты обучения";
+            wordTable.Cell(1, 5).Range.Text = "Уровень освоения компетенций";
+            //строка2
+            wordTable.Cell(2, 5).Range.Text = "Продвинутый уровень";
+            wordTable.Cell(2, 6).Range.Text = "Средний уровень";
+            wordTable.Cell(2, 7).Range.Text = "Базовый уровень";
+            wordTable.Cell(2, 8).Range.Text = "Компетенции не освоены";
+            //строка3
+            wordTable.Cell(3, 5).Range.Text = "Критерии оценивания результатов обучения";
+            //строка4
+            wordTable.Cell(4, 5).Range.Text = "«отлично»\n(от 86 до 100 баллов)";
+            wordTable.Cell(4, 6).Range.Text = "«хорошо»\n(от 71 до 85 баллов)";
+            wordTable.Cell(4, 7).Range.Text = "«удовлетворительно»\n(от 55 до 70 баллов)\n";
+            wordTable.Cell(4, 8).Range.Text = "«неудовлетв.»\n(менее 55 баллов)";
+            //объединение строк, столбцов
+            wordTable.Cell(1, 1).Merge(wordTable.Cell(4, 1));
+            wordTable.Cell(1, 2).Merge(wordTable.Cell(4, 2));
+            wordTable.Cell(1, 3).Merge(wordTable.Cell(4, 3));
+            wordTable.Cell(1, 4).Merge(wordTable.Cell(4, 4));
+            wordTable.Cell(1, 5).Merge(wordTable.Cell(1, 8));
+            wordTable.Cell(3, 5).Merge(wordTable.Cell(3, 8));
+
+            int current_row = 5;
+            for (int i = 0; i < competences.Count; i++)
+            {
+                CompetenceModel current_competence = competences[i];
+                string kod = current_competence.kod;
+                string name = current_competence.name;
+                string know = current_competence.know;
+                string able = current_competence.able;
+                string own = current_competence.own;
+                List<CompetenceModel> childs = current_competence.childs;
+
+                //Столбец1
+                wordTable.Cell(current_row, 1).Range.Text = (i + 1).ToString();
+
+                //Столбец2
+                Word.Range range2 = wordTable.Cell(current_row, 2).Range;
+                range2.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range2.InsertAfter(kod);
+                range2.Font.Bold = Convert.ToInt32(true);
+                range2.InsertParagraphAfter();
+                range2.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+                range2.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range2.InsertAfter(name);
+                range2.Font.Bold = Convert.ToInt32(false);
+                range2.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                //Столбец3
+                Word.Range range3 = wordTable.Cell(current_row, 3).Range;
+                for (int j = 0; j < childs.Count; j++)
+                {
+                    CompetenceModel child = childs[j];
+                    string kod_child = child.kod;
+                    string name_child = child.name;
+
+                    range3.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                    range3.InsertAfter(kod_child + ".");
+                    range3.Font.Bold = Convert.ToInt32(true);
+                    range3.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+                    range3.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+
+                    if (j == childs.Count - 1)
+                    {
+                        range3.InsertAfter(" " + name_child + ".");
+                    }
+                    else
+                    {
+                        range3.InsertAfter(" " + name_child + ";");
+                        range3.InsertParagraphAfter();
+                    }
+                    range3.Font.Bold = Convert.ToInt32(false);
+                    range3.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+                }
+
+                //Столбец4
+                //знать
+                Word.Range range4_1 = wordTable.Cell(current_row, 4).Range;
+                range4_1.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range4_1.InsertAfter("Знать:");
+                range4_1.Font.Bold = Convert.ToInt32(true);
+                range4_1.InsertParagraphAfter();
+                range4_1.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                range4_1.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range4_1.InsertAfter(know.ToLower() + ";");
+                range4_1.Font.Bold = Convert.ToInt32(false);
+                range4_1.InsertParagraphAfter();
+                range4_1.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                //уметь
+                Word.Range range4_2 = wordTable.Cell(current_row + 1, 4).Range;
+                range4_2.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range4_2.InsertAfter("Уметь:");
+                range4_2.Font.Bold = Convert.ToInt32(true);
+                range4_2.InsertParagraphAfter();
+                range4_2.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                range4_2.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range4_2.InsertAfter(able.ToLower() + ";");
+                range4_2.Font.Bold = Convert.ToInt32(false);
+                range4_2.InsertParagraphAfter();
+                range4_2.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                //владеть
+                Word.Range range4_3 = wordTable.Cell(current_row + 2, 4).Range;
+                range4_3.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range4_3.InsertAfter("Владеть:");
+                range4_3.Font.Bold = Convert.ToInt32(true);
+                range4_3.InsertParagraphAfter();
+                range4_3.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                range4_3.Collapse(Word.WdCollapseDirection.wdCollapseStart);
+                range4_3.InsertAfter(own.ToLower() + ".");
+                range4_3.Font.Bold = Convert.ToInt32(false);
+                range4_3.InsertParagraphAfter();
+                range4_3.Collapse(Word.WdCollapseDirection.wdCollapseEnd);
+
+                //Столбец5-8
+                List<ResultDescModel> results = current_competence.results;
+                ResultDescModel knowResult = results[0];
+                ResultDescModel ableResult = results[1];
+                ResultDescModel ownResult = results[2];
+                //знать
+                wordTable.Cell(current_row, 5).Range.Text = knowResult.result5;
+                wordTable.Cell(current_row, 6).Range.Text = knowResult.result4;
+                wordTable.Cell(current_row, 7).Range.Text = knowResult.result3;
+                wordTable.Cell(current_row, 8).Range.Text = knowResult.result2;
+                //уметь
+                wordTable.Cell(current_row + 1, 5).Range.Text = ableResult.result5;
+                wordTable.Cell(current_row + 1, 6).Range.Text = ableResult.result4;
+                wordTable.Cell(current_row + 1, 7).Range.Text = ableResult.result3;
+                wordTable.Cell(current_row + 1, 8).Range.Text = ableResult.result2;
+                //владеть
+                wordTable.Cell(current_row + 2, 5).Range.Text = ownResult.result5;
+                wordTable.Cell(current_row + 2, 6).Range.Text = ownResult.result4;
+                wordTable.Cell(current_row + 2, 7).Range.Text = ownResult.result3;
+                wordTable.Cell(current_row + 2, 8).Range.Text = ownResult.result2;
+
+                //форматирование - объединение строк, столбцов
+                wordTable.Cell(current_row, 1).Merge(wordTable.Cell(current_row + 2, 1));
+                wordTable.Cell(current_row, 2).Merge(wordTable.Cell(current_row + 2, 2));
+                wordTable.Cell(current_row, 3).Merge(wordTable.Cell(current_row + 2, 3));
+
+                //переход новую компенцию
+                current_row = current_row + 3;
+            }
+            //форматирование
+            wordTable.Borders.Enable = Convert.ToInt32(true);
+            wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+            wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+            wordTable.Range.Font.ColorIndex = WdColorIndex.wdAuto;
             wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
         }
     }
