@@ -3,9 +3,11 @@ using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
 using DataTable = System.Data.DataTable;
@@ -54,6 +56,16 @@ namespace TestWord
                 createTable5();
                 createTable6();
                 createTable7();
+                createTable8();
+
+                createTable9();
+                createTable10(); ////
+                createTable11();
+                createTable12();
+                createTable13();
+                createTable14();
+                createTable15();
+                createTable16();
 
                 saveWord();
 
@@ -175,73 +187,73 @@ namespace TestWord
             };
 
             themes = new List<ThemeModel>() {
-                new ThemeModel("Тема 1. Основы метрологии", 8, 1, 2, 4, 4, 4,
+                new ThemeModel("Тема 1. Основы метрологии", 4, 1, 2, 4, 4, 4,
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("История развития метрологии", 2, ""),
+                        new ChildThemeModel("История развития метрологии", 2, "", 0),
                     },
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Измерение линейных размеров с помощью штангенинструментов", 2, ""),
-                        new ChildThemeModel("Электрические измерения напряжения", 2, ""),
+                        new ChildThemeModel("Измерение линейных размеров с помощью штангенинструментов", 2, "", 1),
+                        new ChildThemeModel("Электрические измерения напряжения", 2, "", 1),
                     },
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Системы физических единиц", 2, ""),
-                        new ChildThemeModel("Размерность физических единиц", 2, "")
+                        new ChildThemeModel("Системы физических единиц", 2, "", 1),
+                        new ChildThemeModel("Размерность физических единиц", 2, "", 1)
                     }
                 ),
-                new ThemeModel("Тема 2. Средства и методы измерения", 8, 1, 4, 4, 6, 4,
+                new ThemeModel("Тема 2. Средства и методы измерения", 4, 1, 4, 4, 6, 4,
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Виды и методы измерений", 2, "Проблемная лекция"),
-                        new ChildThemeModel("Средства измерений", 2, "Лекция с запланированными ошибками"),
+                        new ChildThemeModel("Виды и методы измерений", 2, "Проблемная лекция", 0),
+                        new ChildThemeModel("Средства измерений", 2, "Лекция с запланированными ошибками", 0),
                     },
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Поверка СИ температуры", 2, ""),
-                        new ChildThemeModel("Проверка средств измерения давления", 2, ""),
-                        new ChildThemeModel("Аттестация средств измерения давления", 2, ""),
+                        new ChildThemeModel("Поверка СИ температуры", 2, "", 1),
+                        new ChildThemeModel("Проверка средств измерения давления", 2, "", 1),
+                        new ChildThemeModel("Аттестация средств измерения давления", 2, "", 1),
                     },
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Температурные шкалы", 2, ""),
-                        new ChildThemeModel("Метрологические характеристики средств измерения", 2, "работа в малых группах")
+                        new ChildThemeModel("Температурные шкалы", 2, "", 1),
+                        new ChildThemeModel("Метрологические характеристики средств измерения", 2, "работа в малых группах", 1),
                     }
                 ),
-                new ThemeModel("Тема 3. Погрешности измерения", 8, 2, 4, 6, 8, 4,
+                new ThemeModel("Тема 3. Погрешности измерения", 4, 2, 4, 6, 8, 4,
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Основы метрологического обеспечения производства", 2, ""),
-                        new ChildThemeModel("Понятие о погрешности измерений", 2, ""),
+                        new ChildThemeModel("Основы метрологического обеспечения производства", 2, "", 0),
+                        new ChildThemeModel("Понятие о погрешности измерений", 2, "", 0),
                     },
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Определение метрологических характеристик средств измерения", 2, ""),
-                        new ChildThemeModel("Влияние газового фактора на точность измерений", 2, ""),
-                        new ChildThemeModel("Определение погрешностей СИ при изменении характеристики среды", 2, ""),
-                        new ChildThemeModel("Влияние не стабильности потока на точность измерения", 2, ""),
+                        new ChildThemeModel("Определение метрологических характеристик средств измерения", 2, "", 1),
+                        new ChildThemeModel("Влияние газового фактора на точность измерений", 2, "", 1),
+                        new ChildThemeModel("Определение погрешностей СИ при изменении характеристики среды", 2, "", 1),
+                        new ChildThemeModel("Влияние не стабильности потока на точность измерения", 2, "", 1),
                     },
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Определение погрешностей измерения", 2, "групповое обсуждение"),
-                        new ChildThemeModel("Погрешности косвенных измерений", 2, ""),
-                        new ChildThemeModel("Определение доверительных границ и доверительных интервалов", 2, "работа в малых группах"),
+                        new ChildThemeModel("Определение погрешностей измерения", 2, "групповое обсуждение", 1),
+                        new ChildThemeModel("Погрешности косвенных измерений", 2, "", 1),
+                        new ChildThemeModel("Определение доверительных границ и доверительных интервалов", 2, "работа в малых группах", 1),
                     }
                 ),
-                new ThemeModel("Тема 4. Основы стандартизации", 8, 2, 4, 2, 0, 4,
+                new ThemeModel("Тема 4. Основы стандартизации", 4, 2, 4, 2, 0, 4,
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("История развития стандартизации", 2, "Лекция-визуализация"),
-                        new ChildThemeModel("Методы и средства стандартизации", 2, ""),
+                        new ChildThemeModel("История развития стандартизации", 2, "Лекция-визуализация", 0),
+                        new ChildThemeModel("Методы и средства стандартизации", 2, "", 0),
                     },
                     null,
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Нормативно-правовые документы по стандартизации", 2, ""),
+                        new ChildThemeModel("Нормативно-правовые документы по стандартизации", 2, "", 1),
                     }
                 ),
-                new ThemeModel("Тема 5. Основы сертификации", 8, 2, 2, 2, 0, 4,
+                new ThemeModel("Тема 5. Основы сертификации", 4, 2, 2, 2, 0, 4,
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Основные понятия сертификации", 2, ""),
+                        new ChildThemeModel("Основные понятия сертификации", 2, "", 0),
                     },
                     null,
                     new List<ChildThemeModel> {
-                        new ChildThemeModel("Сходства и отличия «Сертификация соответствия» и «Декларирование соответствия»", 2, ""),
+                        new ChildThemeModel("Сходства и отличия «Сертификация соответствия» и «Декларирование соответствия»", 2, "", 1),
                     }
                 ),
             };
 
-            List<int> semesters = new List<int>() { 4 };
+            List<int> semesters = new List<int>() { 4, 8 };
             int total_lecture_hour = 16;
             int total_practical_hour = 18;
             int total_laboratory_hour = 18;
@@ -360,11 +372,15 @@ namespace TestWord
             public int hour { get; set; }
             public string method { get; set; }
 
-            public ChildThemeModel(string name, int hour, string method)
+            //баллы
+            public float score { get; set; }
+
+            public ChildThemeModel(string name, int hour, string method, float score)
             {
                 this.name = name;
                 this.hour = hour;
                 this.method = method;
+                this.score = score;
             }
         }
 
@@ -432,15 +448,26 @@ namespace TestWord
                 this.answers = answers;
             }
 
+            //вопросы к экзамену 6.3.4.3. 
             public QuestionModel(string name, List<string> competence)
             {
                 this.name = name;
                 this.competence = competence;
             }
 
+
             public QuestionModel(string name)
             {
                 this.name = name;
+            }
+
+            //тест экзамен
+            public QuestionModel(string name, List<QuestionModel> answers)
+            {
+                this.name = name;
+                this.semester = semester;
+                this.module = module;
+                this.answers = answers;
             }
         }
 
@@ -874,27 +901,26 @@ namespace TestWord
                 text_keys.Add(semester_text, $"Семестр {semester}");
                 table_keys.Add(semester_table, semester);
 
+                wordRange.Collapse(WdCollapseDirection.wdCollapseStart);
                 wordRange.InsertAfter(semester_text);
+                wordRange.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                wordRange.Bold = Convert.ToInt32(true);
+                wordRange.Font.Size = 14;
                 wordRange.InsertParagraphAfter();
+                wordRange.Collapse(WdCollapseDirection.wdCollapseEnd);
+
+                wordRange.Collapse(WdCollapseDirection.wdCollapseStart);
                 wordRange.InsertAfter(semester_table);
+                wordRange.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                wordRange.Bold = Convert.ToInt32(false);
+                wordRange.Font.Size = 12;
+                wordRange.InsertParagraphAfter();
+                wordRange.Collapse(WdCollapseDirection.wdCollapseEnd);
             }
             //удаление main_key из word
             app.Selection.Find.Execute(main_key);
             Word.Range wordRangeDelete = app.Selection.Range;
             wordRangeDelete.Delete();
-            
-            //форматирование слова Семестр {0}
-            foreach (var item in text_keys)
-            {
-                app.Selection.Find.Execute(item.Key);
-                Word.Range range = app.Selection.Range;
-                range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
-                range.Bold = Convert.ToInt32(true);
-                range.Font.Size = 14;
-            }
-
-            //замена тэгов на слова семестров
-            replaceText(text_keys);
 
             string[] columns = {
                 "Тема",
@@ -918,7 +944,8 @@ namespace TestWord
                 for (int i = 0; i < total_row+3; i++)
                     dt.Rows.Add();
 
-                app.Selection.Find.Execute(semester.Key);
+                app.Selection.Find.Wrap = WdFindWrap.wdFindContinue;
+                bool g = app.Selection.Find.Execute(semester.Key);
                 Word.Range wordRangeTable = app.Selection.Range;
                 var wordTable = wordDocument.Tables.Add(wordRangeTable,
                     dt.Rows.Count, dt.Columns.Count);
@@ -993,6 +1020,8 @@ namespace TestWord
                 wordTable.Cell(1, 3).Range.Bold = Convert.ToInt32(true);
                 wordTable.Cell(1, 4).Range.Bold = Convert.ToInt32(true);
             }
+            //замена тэгов на слова семестров
+            replaceText(text_keys);
         }
         //загрузка данных в таблицу4
         //чтобы убрать повтор кода
@@ -1458,6 +1487,8 @@ namespace TestWord
                 var list1 = test_computer.Where(a => a.semester == semester && a.module == 1).ToList();
                 var list2 = test_computer.Where(a => a.semester == semester && a.module == 2).ToList();
 
+                if(list1.Count is 0 && list2.Count is 0)
+                    continue;
                 //МОДУЛЬ_1
                 wordTable.Cell(current_row, 1).Range.Text = "Дисциплинарный модуль " + semester + ".1";
                 wordTable.Cell(current_row, 1).Merge(wordTable.Cell(current_row, max_answers + 2));
@@ -1508,6 +1539,532 @@ namespace TestWord
             wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitFixed);
         }
 
+        //Экзамен 6.3.4.3. Содержание оценочного средства
+        private void createTable8()
+        {
+            //вопросы к экзамену
+            List<QuestionModel> questions = new List<QuestionModel>()
+            {
+                new QuestionModel("Основные, дополнительные, производные, внесистемные единицы, допускаемые к применению наравне с единицами СИ", new List<string>(){"ОПК-11", "ОПК-12"}),
+                new QuestionModel("Кратные и дольные единицы измерений", new List<string>(){"ОПК-11", "ОПК-12"}),
+                new QuestionModel("Международная система единиц физических величин (СИ), ее применение в России", new List<string>(){"ОПК-11"}),
+                new QuestionModel("Эталоны физических величин", new List<string>(){"ОПК-12"}),
+            };
 
+            app.Selection.Find.Execute("<TABLE8>");
+            var wordRange = app.Selection.Range;
+
+            int colomn_count = 2+discipline.competences.Count;
+            int row_count = 1+questions.Count;
+
+            Word.Table wordTable = wordDocument.Tables.Add(wordRange, row_count, colomn_count);
+            wordTable.Borders.Enable = Convert.ToInt32(true);
+
+            wordTable.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+
+            //заполнение
+            wordTable.Cell(1, 1).Range.Text = "№ п/п";
+            wordTable.Cell(1, 2).Range.Text = "Примерные вопросы к экзамену";
+            for (int i = 0; i < discipline.competences.Count; i++)
+                wordTable.Cell(1, 3 + i).Range.Text = discipline.competences[i].kod;
+
+            int current_row = 2;
+            for (int i = 0; i < questions.Count; i++)
+            {
+                var question = questions[i];
+                wordTable.Cell(current_row, 1).Range.Text = (i + 1).ToString();
+                wordTable.Cell(current_row, 2).Range.Text = question.name;
+                for (int j = 0; j < discipline.competences.Count; j++)
+                {
+                    var current_competence = discipline.competences[j];
+                    for (int k = 0; k < question.competence.Count; k++)
+                    {
+                        if (question.competence[k] == current_competence.kod)
+                            wordTable.Cell(current_row, 3 + j).Range.Text = "+";
+                    }
+                }
+                wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                current_row++;
+            }
+
+            wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+            wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+            wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
+        }
+        
+        //образей вариантов тестовых заданий на экзамен
+        private void createTable9()
+        {
+            List<QuestionModel> test = new List<QuestionModel>()
+            {
+                new QuestionModel(
+                    "Значение любой физической величины Q, представленное в виде Q=q[Q] произведения ее числового значения q на единицу измерения [Q], называется…",
+                    new List<QuestionModel>()
+                    {
+                        new QuestionModel("Математической моделью измерений"),
+                        new QuestionModel("Функцией преобразования средства измерений"),
+                        new QuestionModel("Основным уравнением измерений"),
+                        new QuestionModel("Шкалой физической величины"),
+                    }
+                ),
+                new QuestionModel(
+                    "Уравнение ускорения a=v/t. Размерность ускорения запишется следующим образом",
+                    new List<QuestionModel>()
+                    {
+                        new QuestionModel("LT^(-2)"),
+                        new QuestionModel("MLT^(-1)"),
+                        new QuestionModel("LT^(-1)"),
+                        new QuestionModel("L^(-2) T"),
+                    }
+                ),
+                new QuestionModel(
+                    "Определение искомого значения ФВ на основании результатов прямых измерений других ФВ, функционально связанных с искомой величиной, называется ________ измерением",
+                    new List<QuestionModel>()
+                    {
+                        new QuestionModel("Косвенным"),
+                        new QuestionModel("Совместным"),
+                        new QuestionModel("Совокупным"),
+                        new QuestionModel("Прямым"),
+                    }
+                ),
+            };
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Код");
+            dt.Columns.Add("Вопрос");
+            int max_answers = test.Max(a => a.answers.Count);
+            for (int i = 1; i <= max_answers; i++)
+                dt.Columns.Add(i + "");
+            int row_count = 2 + test.Count;
+            for (int i = 1; i <= row_count; i++)
+                dt.Rows.Add();
+
+            app.Selection.Find.Execute("<TABLE9>");
+            Word.Range wordRange = app.Selection.Range;
+            Word.Table wordTable = wordDocument.Tables.Add(wordRange, dt.Rows.Count, dt.Columns.Count);
+            //шапка
+            wordTable.Cell(1, 1).Range.Text = "Код компетенции";
+            wordTable.Cell(1, 2).Range.Text = "Тестовые вопросы";
+            wordTable.Cell(1, 3).Range.Text = "Варианты ответов";
+            for (int i = 1; i <= max_answers; i++)
+                wordTable.Cell(2, 2 + i).Range.Text = i.ToString();
+
+            //форматирование
+            wordTable.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+            wordTable.Borders.Enable = Convert.ToInt32(true);
+            wordTable.Cell(1, 1).Merge(wordTable.Cell(2, 1));
+            wordTable.Cell(1, 2).Merge(wordTable.Cell(2, 2));
+            wordTable.Cell(1, 3).Merge(wordTable.Cell(1, max_answers + 2));
+
+            int current_row = 3;
+
+            //данные
+            wordTable.Cell(current_row, 1).Range.Text = string.Join(", ", discipline.competences.Select(a => a.kod));
+            wordTable.Cell(current_row, 1).Range.Bold = Convert.ToInt32(true);
+            wordTable.Cell(current_row, 1).Merge(wordTable.Cell(current_row + test.Count - 1, 1));
+            foreach (var item in test)
+            {
+                wordTable.Cell(current_row, 2).Range.Text = item.name;
+                wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                for (int i = 0; i < item.answers.Count; i++)
+                {
+                    wordTable.Cell(current_row, 3 + i).Range.Text = item.answers[i].name;
+                    wordTable.Cell(current_row, 3 + i).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                }
+                current_row++;
+            }
+            
+            wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+            wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+            wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitFixed);
+        }
+
+        //ДОРАБОТАТЬ
+        private void createTable10()
+        {
+            string main_key = "<TABLE10>";
+            app.Selection.Find.Execute(main_key);
+            Word.Range wordRange = app.Selection.Range;
+
+            Dictionary<int, Dictionary<string, string>> text_keys = new Dictionary<int, Dictionary<string, string>>();
+            Dictionary<int, List<string>> table_keys = new Dictionary<int, List<string>>();
+
+            //вставка тэгов в ворд
+            foreach (var semester in discipline.semesters)
+            {
+                List<string> list_key_text = new List<string>()
+                {
+                    $"<TEXT10_{semester}.0>", 
+                    $"<TEXT10_{semester}.1>", 
+                    $"<TEXT10_{semester}.2>"
+                };
+                List<string> list_key_table = new List<string>()
+                {
+                    $"<TABLE10_{semester}.0>",
+                    $"<TABLE10_{semester}.1>",
+                    $"<TABLE10_{semester}.2>",
+                };
+
+                text_keys.Add(semester, new Dictionary<string, string>()
+                {
+                    [list_key_text[0]] = $"Семестр {semester}",
+                    [list_key_text[1]] = $"Дисциплинарный модуль {semester}.1",
+                    [list_key_text[2]] = $"Дисциплинарный модуль {semester}.2",
+                });
+
+                table_keys.Add(semester, list_key_table);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    wordRange.Collapse(WdCollapseDirection.wdCollapseStart);
+                    wordRange.InsertAfter(list_key_text[i]);
+                    wordRange.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                    wordRange.Bold = Convert.ToInt32(true);
+                    wordRange.Font.Size = 14;
+                    wordRange.InsertParagraphAfter();
+                    wordRange.Collapse(WdCollapseDirection.wdCollapseEnd);
+
+                    wordRange.Collapse(WdCollapseDirection.wdCollapseStart);
+                    wordRange.InsertAfter(list_key_table[i]);
+                    wordRange.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    wordRange.Bold = Convert.ToInt32(false);
+                    wordRange.Font.Size = 12;
+                    wordRange.InsertParagraphAfter();
+                    wordRange.Collapse(WdCollapseDirection.wdCollapseEnd);
+                }
+            }
+            //удаление main_key из word
+            app.Selection.Find.Wrap = WdFindWrap.wdFindContinue;
+            app.Selection.Find.Execute(main_key);
+            Word.Range wordRangeDelete = app.Selection.Range;
+            wordRangeDelete.Delete();
+
+            foreach (var item in text_keys)
+                replaceText(item.Value);
+
+            int current_lecture = 1;
+            int current_laboratories = 1;
+            int current_practical = 1;
+            //замена тэгов на таблицы семестров
+            foreach (var semester in table_keys)
+            {
+                List<string> current_keys = semester.Value;
+                
+                //ГЛАВНАЯ ТАБЛИЦА
+                var dt_main = new DataTable();
+                for (int i = 0; i < 5; i++)
+                    dt_main.Rows.Add();
+                for (int i = 0; i < 3; i++)
+                    dt_main.Columns.Add();
+                app.Selection.Find.Wrap = WdFindWrap.wdFindContinue;
+                app.Selection.Find.Execute(current_keys[0]);
+                Word.Range wordRangeTable = app.Selection.Range;
+                var wordTable = wordDocument.Tables.Add(wordRangeTable,
+                    dt_main.Rows.Count, dt_main.Columns.Count);
+                wordTable.Cell(1, 1).Range.Text = "Дисциплинарный модуль";
+                //!!!! лабораторные устные опросы ДОРАБОТАТЬ!!!!!!!!!
+                wordTable.Cell(2, 1).Range.Text = "Текущий контроль (лабораторные работы, практические задачи)";
+                wordTable.Cell(3, 1).Range.Text = "Текущий контроль (тестирование)";
+                wordTable.Cell(4, 1).Range.Text = "Общее количество баллов";
+                wordTable.Cell(5, 1).Range.Text = "Итоговый балл:";
+                wordTable.Cell(1, 2).Range.Text = $"ДМ {semester.Key}.1";
+                wordTable.Cell(1, 3).Range.Text = $"ДМ {semester.Key}.2";
+                //!!!! Доработать, чтобы баллы брались $$откуда-то$$
+                //баллы за практические, лабы, устные
+                wordTable.Cell(2, 2).Range.Text = "9-15";
+                wordTable.Cell(2, 3).Range.Text = "9-15";
+                //баллы за тестирование
+                wordTable.Cell(3, 2).Range.Text = "8-15";
+                wordTable.Cell(3, 3).Range.Text = "9-15";
+                //общее кол-во баллов
+                wordTable.Cell(4, 2).Range.Text = "17-30";
+                wordTable.Cell(4, 3).Range.Text = "18-30";
+                //итоговый балл
+                /* 
+                string score = "";
+                if (экзамен || зачет)
+                    score = "35-60";
+                else if(зачет с оценкой)
+                    score = "35-60";
+                */
+                wordTable.Cell(5, 2).Range.Text = "35-60";
+                //форматирование
+                wordTable.Borders.Enable = Convert.ToInt32(true);
+                wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+                wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+                wordTable.Cell(1, 1).Range.Bold = Convert.ToInt32(true);
+                wordTable.Cell(1, 2).Range.Bold = Convert.ToInt32(true);
+                wordTable.Cell(1, 3).Range.Bold = Convert.ToInt32(true);
+                wordTable.Cell(4, 1).Range.Bold = Convert.ToInt32(true);
+                wordTable.Cell(4, 2).Range.Bold = Convert.ToInt32(true);
+                wordTable.Cell(4, 3).Range.Bold = Convert.ToInt32(true);
+                wordTable.Cell(5, 1).Range.Bold = Convert.ToInt32(true);
+                wordTable.Cell(5, 2).Range.Bold = Convert.ToInt32(true);
+                for (int i = 1; i <= 5; i++)
+                    wordTable.Cell(i, 1).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                for (int i = 1; i <= 5; i++)
+                    for (int j = 2; j <= 3; j++)
+                        wordTable.Cell(i, j).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                wordTable.Cell(5, 2).Merge(wordTable.Cell(5, 3));
+                wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
+
+                //ТАБЛИЦЫ - дисциплинарный модуль1,2
+                for (int module = 1; module <= 2; module++)
+                {
+                    List<ChildThemeModel> lecture_list = discipline.themes.Where(a => a.semester.Equals(semester.Key) && a.module.Equals(module) && a.lectures is not null).SelectMany(a => a.lectures.Where(b => b.score is not 0)).ToList();
+                    List<ChildThemeModel> laboratory_list = discipline.themes.Where(a => a.semester.Equals(semester.Key) && a.module.Equals(module) && a.laboratories is not null).SelectMany(a => a.laboratories.Where(b => b.score is not 0)).ToList();
+                    List<ChildThemeModel> practical_list = discipline.themes.Where(a => a.semester.Equals(semester.Key) && a.module.Equals(module) && a.practicals is not null).SelectMany(a => a.practicals.Where(b => b.score is not 0)).ToList();
+                    int row = 2 + lecture_list.Count + laboratory_list.Count + practical_list.Count + 4;
+                    int column = 3;
+                    app.Selection.Find.Wrap = WdFindWrap.wdFindContinue;
+                    app.Selection.Find.Execute(current_keys[module]);
+                    wordRangeTable = app.Selection.Range;
+                    wordTable = wordDocument.Tables.Add(wordRangeTable, row, column);
+                    wordTable.Cell(1, 1).Range.Text = "№п/п";
+                    wordTable.Cell(1, 2).Range.Text = "Виды работ";
+                    wordTable.Cell(1, 3).Range.Text = "Максимальный балл";
+                    wordTable.Cell(2, 1).Range.Text = "Текущий контроль";
+                    //форматирование
+                    wordTable.Borders.Enable = Convert.ToInt32(true);
+                    wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+                    wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+                    wordTable.Range.Font.Size = 12;
+                    wordTable.Range.ParagraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
+                    wordTable.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    wordTable.Cell(1, 1).Range.Bold = Convert.ToInt32(true);
+                    wordTable.Cell(1, 2).Range.Bold = Convert.ToInt32(true);
+                    wordTable.Cell(1, 3).Range.Bold = Convert.ToInt32(true);
+                    wordTable.Cell(2, 1).Range.Bold = Convert.ToInt32(true);
+                    wordTable.Cell(2, 1).Merge(wordTable.Cell(2, 3));
+                    int current_row = 3;
+                    if (lecture_list is not null)
+                        for (int index = 0; index < lecture_list.Count; index++)
+                        {
+                            wordTable.Cell(current_row, 1).Range.Text = (index + 1).ToString();
+                            wordTable.Cell(current_row, 2).Range.Text = $"Лекция-{current_lecture} {lecture_list[index].name}";
+                            wordTable.Cell(current_row, 3).Range.Text = lecture_list[index].score.ToString();
+                            //форматирование
+                            wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                            current_lecture++;
+                            current_row++;
+                        }
+                    if (laboratory_list is not null)
+                        for (int index = 0; index < laboratory_list.Count; index++)
+                        {
+                            wordTable.Cell(current_row, 1).Range.Text = (index + 1).ToString();
+                            wordTable.Cell(current_row, 2).Range.Text = $"Л.Р.-{current_laboratories} {laboratory_list[index].name}";
+                            wordTable.Cell(current_row, 3).Range.Text = laboratory_list[index].score.ToString();
+                            //форматирование
+                            wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                            current_laboratories++;
+                            current_row++;
+                        }
+                    if (practical_list is not null)
+                        for (int index = 0; index < practical_list.Count; index++)
+                        {
+                            wordTable.Cell(current_row, 1).Range.Text = (index + 1).ToString();
+                            wordTable.Cell(current_row, 2).Range.Text = $"П.З.-{current_practical} {practical_list[index].name}";
+                            wordTable.Cell(current_row, 3).Range.Text = practical_list[index].score.ToString();
+                            //форматирование
+                            wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                            current_practical++;
+                            current_row++;
+                        }
+                    wordTable.Cell(current_row, 1).Range.Text = "Итого:";
+                    wordTable.Cell(current_row, 3).Range.Text = "15";
+                    //форматирование
+                    wordTable.Cell(current_row, 1).Range.Bold = Convert.ToInt32(true);
+                    wordTable.Cell(current_row, 3).Range.Bold = Convert.ToInt32(true);
+                    wordTable.Cell(current_row, 1).Merge(wordTable.Cell(current_row, 2));
+                    wordTable.Cell(current_row, 1).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                    current_row++;
+                    wordTable.Cell(current_row, 1).Range.Text = "Текущий контроль";
+                    //форматирование
+                    wordTable.Cell(current_row, 1).Range.Bold = Convert.ToInt32(true);
+                    wordTable.Cell(current_row, 1).Merge(wordTable.Cell(current_row, 3));
+                    current_row++;
+                    wordTable.Cell(current_row, 1).Range.Text = "1";
+                    wordTable.Cell(current_row, 2).Range.Text = "Тестирование";
+                    wordTable.Cell(current_row, 3).Range.Text = "15";
+                    //форматирование
+                    wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                    wordTable.Cell(current_row, 3).Range.Bold = Convert.ToInt32(true);
+                    current_row++;
+                    wordTable.Cell(current_row, 1).Range.Text = $"Итого по ДМ {semester.Key}.{module}";
+                    wordTable.Cell(current_row, 3).Range.Text = "30";
+                    //форматирование
+                    wordTable.Cell(current_row, 1).Range.Bold = Convert.ToInt32(true);
+                    wordTable.Cell(current_row, 3).Range.Bold = Convert.ToInt32(true);
+                    wordTable.Cell(current_row, 1).Merge(wordTable.Cell(current_row, 2));
+                    wordTable.Cell(current_row, 1).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                    //финальное форматирование
+                    wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
+
+                }
+            }
+        }
+
+        private void createTable11()
+        {
+            //основная литература
+            List<LiteratureModel> main = new List<LiteratureModel>()
+            {
+                new LiteratureModel("Мирный, В. И. Законодательная метрология : учебное пособие / В. И. Мирный", 101, 1),
+                new LiteratureModel("Воробьева, Г. Н. Метрология, стандартизация и сертификация", "http://www.iprbookshop.ru/57097.html", 0),
+                new LiteratureModel("Семенов, И. В. Метрология, стандартизация и сертификация", "https://www.iprbookshop.ru/115857.html", 1),
+            };
+            //дополнительная литература
+            List<LiteratureModel> additional = new List<LiteratureModel>()
+            {
+                new LiteratureModel("Лепявко, А. П. Измерительные преобразователи давления", "https://www.iprbookshop.ru/118037.html", 1),
+                new LiteratureModel("Мирный, В. И. Прикладная метрология : учебное пособие / В. И. Мирный", "https://www.iprbookshop.ru/118037.html", 1),
+                new LiteratureModel("Многофазные испытательные стенды газожидкостных смесей: метрология, моделирование, подобие : монография", "https://www.iprbookshop.ru/118037.html", 1),
+            };
+            //учебно-методические издания
+            List<LiteratureModel> methodical = new List<LiteratureModel>()
+            {
+                new LiteratureModel("Ситдикова И.П., Ахметзянов Р.Р. Метрология, стандартизация и сертификация: методические указания для выполнения лабораторных работ", "http://elibrary.agni-rt.ru", 1),
+                new LiteratureModel("Ситдикова И.П., Ахметзянов Р.Р. Метрология, стандартизация и сертификация: методические указания по выполнению курсовой работы", "http://elibrary.agni-rt.ru", 1),
+                new LiteratureModel("Ситдикова И.П., Ахметзянов Р.Р. Метрология, стандартизация и сертификация: методические указания для проведения практических занятий", "http://elibrary.agni-rt.ru", 1),
+            };
+            int row = 2 + main.Count+1+additional.Count+1+methodical.Count;
+            int column = 4;
+            app.Selection.Find.Execute("<TABLE11>");
+            Word.Range wordTableRange = app.Selection.Range;
+            Word.Table wordTable = app.ActiveDocument.Tables.Add(wordTableRange, row, column);
+            wordTable.Cell(1, 1).Range.Text = "№ п/п";
+            wordTable.Cell(1, 2).Range.Text = "Библиографическое описание";
+            wordTable.Cell(1, 3).Range.Text = "Количество печатных экземпляров или адрес электронного ресурса";
+            wordTable.Cell(1, 4).Range.Text = "Коэффициент обеспеченности";
+            //форматирование
+            wordTable.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+            wordTable.Cell(1, 4).Range.Orientation = WdTextOrientation.wdTextOrientationUpward;
+            wordTable.Cell(1, 1).VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
+            wordTable.Cell(1, 2).VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
+            wordTable.Cell(1, 3).VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
+            wordTable.Cell(1, 4).VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
+            wordTable.Rows[1].Height = app.CentimetersToPoints(4f);
+            wordTable.Range.Columns[1].Width = app.CentimetersToPoints(0.99f);
+            wordTable.Range.Columns[2].Width = app.CentimetersToPoints(7.84f);
+            wordTable.Range.Columns[3].Width = app.CentimetersToPoints(7.30f);
+            wordTable.Range.Columns[4].Width = app.CentimetersToPoints(1.22f);
+            int current_row = 2;
+            //основная литература
+            wordTable.Cell(current_row, 1).Range.Text = "Основная литература";
+            wordTable.Cell(current_row, 1).Range.Bold = Convert.ToInt32(true);
+            wordTable.Cell(current_row, 1).Merge(wordTable.Cell(current_row, 4));
+            current_row++;
+            for (int i = 0; i < main.Count; i++)
+            {
+                wordTable.Cell(current_row, 1).Range.Text = $"{i + 1}";
+                wordTable.Cell(current_row, 2).Range.Text = $"{main[i].name}";
+                wordTable.Cell(current_row, 3).Range.Text = main[i].link is not null ? $"Режим доступа:\n{main[i].link}" : $"{main[i].count} экз.";
+                wordTable.Cell(current_row, 4).Range.Text = main[i].coefficient is 0 ? "" : $"{main[i].coefficient}";
+                //форматирование
+                wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                wordTable.Cell(current_row, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                current_row++;
+            }
+            //дополнительная литература
+            wordTable.Cell(current_row, 1).Range.Text = "Дополнительная литература";
+            wordTable.Cell(current_row, 1).Range.Bold = Convert.ToInt32(true);
+            wordTable.Cell(current_row, 1).Merge(wordTable.Cell(current_row, 4));
+            current_row++;
+            for (int i = 0; i < additional.Count; i++)
+            {
+                wordTable.Cell(current_row, 1).Range.Text = $"{i + 1}";
+                wordTable.Cell(current_row, 2).Range.Text = $"{additional[i].name}";
+                wordTable.Cell(current_row, 3).Range.Text = additional[i].link is not null ? $"Режим доступа:\n{additional[i].link}" : $"{additional[i].count} экз.";
+                wordTable.Cell(current_row, 4).Range.Text = additional[i].coefficient is 0 ? "" : $"{additional[i].coefficient}";
+                //форматирование
+                wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                wordTable.Cell(current_row, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                current_row++;
+            }
+            //Учебно-методические издания
+            wordTable.Cell(current_row, 1).Range.Text = "Учебно-методические издания";
+            wordTable.Cell(current_row, 1).Range.Bold = Convert.ToInt32(true);
+            wordTable.Cell(current_row, 1).Merge(wordTable.Cell(current_row, 4));
+            current_row++;
+            for (int i = 0; i < methodical.Count; i++)
+            {
+                wordTable.Cell(current_row, 1).Range.Text = $"{i + 1}";
+                wordTable.Cell(current_row, 2).Range.Text = $"{methodical[i].name}";
+                wordTable.Cell(current_row, 3).Range.Text = methodical[i].link is not null ? $"Режим доступа:\n{methodical[i].link}" : $"{methodical[i].count} экз.";
+                wordTable.Cell(current_row, 4).Range.Text = methodical[i].coefficient is 0 ? "" : $"{methodical[i].coefficient}";
+                //форматирование
+                wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                wordTable.Cell(current_row, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                current_row++;
+            }
+            
+            //wordTable.Range.Rows[1].Height = app.CentimetersToPoints(3.22f);
+            //wordTable.Range.Columns[4].Width = app.CentimetersToPoints(1.28f);
+
+            
+            wordTable.Borders.Enable = Convert.ToInt32(true);
+            wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+            wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+            wordTable.Range.Font.Size = 12;
+            wordTable.Range.ParagraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
+        }
+
+        private class LiteratureModel
+        {
+            //6 и 8
+            public string name { get; set; }
+            public int? count { get; set; }
+            public string? link { get; set; }
+            public float? coefficient { get; set; }
+            //6
+            public LiteratureModel(string name, int count, float coefficient)
+            {
+                this.name = name;
+                this.count = count;
+                this.coefficient = coefficient;
+            }
+            public LiteratureModel(string name, string link, float coefficient)
+            {
+                this.name = name;
+                this.link = link;
+                this.coefficient = coefficient;
+            }
+            //8
+            public LiteratureModel(string name, string link)
+            {
+                this.name = name;
+                this.link = link;
+            }
+        }
+
+        private void createTable12()
+        {
+
+
+        }
+
+        private void createTable13()
+        {
+
+
+        }
+
+        private void createTable14()
+        {
+
+
+        }
+
+        private void createTable15()
+        {
+
+
+        }
+
+        private void createTable16()
+        {
+
+
+        }
     }
 }
