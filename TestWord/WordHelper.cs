@@ -2039,14 +2039,103 @@ namespace TestWord
 
         private void createTable12()
         {
-
-
+            List<LiteratureModel> site_list = new List<LiteratureModel>()
+            {
+                new LiteratureModel("Учебно-методическая литература для учащихся и студентов, размещенная на сайте «Studmed.ru»", "http://www.studmed.ru "),
+                new LiteratureModel("Единое окно доступа к информационным ресурсам", "http://window.edu.ru/ "),
+                new LiteratureModel("Российская государственная библиотека", "http://www.rsl.ru "),
+                new LiteratureModel("Электронная библиотека Elibrary", "http://elibrary.ru "),
+                new LiteratureModel("Электронно-библиотечная система IPRbooks", "http://elibrary.ru "),
+                new LiteratureModel("Электронная библиотека АГНИ", "http://elibrary.agni-rt.ru "),
+                new LiteratureModel("Энциклопедия России «Библиотекарь»", "http://bibliotekar.ru "),
+            };
+            int row = 1 + site_list.Count;
+            int column = 3;
+            app.Selection.Find.Execute("<TABLE12>");
+            Word.Range wordTableRange = app.Selection.Range;
+            Word.Table wordTable = wordDocument.Tables.Add(wordTableRange, row, column);
+            //форматирование
+            wordTable.Borders.Enable = Convert.ToInt32(true);
+            wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+            wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+            wordTable.Range.ParagraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
+            wordTable.Rows[1].Range.Bold = Convert.ToInt32(true);
+            wordTable.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+            wordTable.Cell(1, 1).Range.Text = "№ п/п";
+            wordTable.Cell(1, 2).Range.Text = "Наименование";
+            wordTable.Cell(1, 3).Range.Text = "Алрес в Интернете";
+            int current_row = 2;
+            for (int i = 0; i < site_list.Count; i++)
+            {
+                wordTable.Cell(current_row, 1).Range.Text = $"{i + 1}";
+                wordTable.Cell(current_row, 2).Range.Text = $"{site_list[i].name}";
+                wordTable.Cell(current_row, 3).Range.Text = $"{site_list[i].link}";
+                //форматирование
+                wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                wordTable.Cell(current_row, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                current_row++;
+            }
+            wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
         }
 
-        private void createTable13()
+        private void createTable13() //10
         {
+            List<SoftwareModel> software_list = new List<SoftwareModel>()
+            {
+                new SoftwareModel("Microsoft Office Professional Plus 2016 Rus Academic OLP (Word, Excel, PowerPoint, Access)", "№67892163 от 26.12.2016г.", "№0297/136 от 23.12.2016г."),
+                new SoftwareModel("Microsoft Office Standard 2016 Rus Academic OLP (Word, Excel, PowerPoint)", "№67892163 от 26.12.2016г.", "№0297/136 от 23.12.2016г."),
+                new SoftwareModel("Microsoft Windows Professional 10 Rus Upgrade Academic OLP", "№67892163 от 26.12.2016г.", "№0297/136 от 23.12.2016г."),
+                new SoftwareModel("ABBYY Fine Reader 12 Professional", "№197059 от 26.12.2016г.", "№0297/136 от 23.12.2016г."),
+                new SoftwareModel("Kaspersky Endpoint Security для бизнеса – Стандартный Russian Edition", "№ 24С4-221222-121357-913-1225", "№691447/581-2022 от 16.12.2022г."), //Доработать текущий год поставить
+                new SoftwareModel("Электронно-библиотечная система IPRbooks", "", "Лицензионный договор №409-2022 от 03.11.2022г."),
+                new SoftwareModel("Образовательная платформа для подготовки кадров в цифровой экономике DATALIB.RU", "", "Лицензионный договор №428-2022/22d/B от 09.11.2022г."),
+                new SoftwareModel("ПО «Автоматизированная тестирующая система", "Свидетельство государственной регистрации программ для ЭВМ №2014614238 от 01.04.2014г.", ""),
+            };
+            int row = 1 + software_list.Count;
+            int column = 4;
+            app.Selection.Find.Execute("<TABLE13>");
+            Word.Range wordTableRange = app.Selection.Range;
+            Word.Table wordTable = wordDocument.Tables.Add(wordTableRange, row, column);
+            //форматирование
+            wordTable.Borders.Enable = Convert.ToInt32(true);
+            wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+            wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+            wordTable.Range.ParagraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
+            wordTable.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+            wordTable.Rows[1].Range.Bold = Convert.ToInt32(true);
+            wordTable.Range.Font.Size = 12;
+            wordTable.Cell(1, 1).Range.Text = "№ п/п";
+            wordTable.Cell(1, 2).Range.Text = "Наименование программного обеспечения";
+            wordTable.Cell(1, 3).Range.Text = "Лицензия";
+            wordTable.Cell(1, 4).Range.Text = "Договор";
+            int current_row = 2;
+            for (int i = 0; i < software_list.Count; i++)
+            {
+                wordTable.Cell(current_row, 1).Range.Text = $"{i + 1}";
+                wordTable.Cell(current_row, 2).Range.Text = $"{software_list[i].name}";
+                wordTable.Cell(current_row, 3).Range.Text = $"{software_list[i].license}";
+                wordTable.Cell(current_row, 4).Range.Text = $"{software_list[i].contract}";
+                //форматирование
+                wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                wordTable.Cell(current_row, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                wordTable.Cell(current_row, 4).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                current_row++;
+            }
+            wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
+        }
 
+        private class SoftwareModel //10
+        {
+            public string name { get; set; }
+            public string license { get; set; }
+            public string contract { get; set; }
 
+            public SoftwareModel(string name, string license, string contract)
+            {
+                this.name = name;
+                this.license = license;
+                this.contract = contract;
+            }
         }
 
         private void createTable14()
