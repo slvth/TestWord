@@ -51,7 +51,7 @@ namespace TestWord
                 replaceText(items);
                 createTable1();
                 createTable2();
-                createTable3();
+                createTable3_15("<TABLE3>");
                 createTable4();
                 createTable5();
                 createTable6();
@@ -64,7 +64,7 @@ namespace TestWord
                 createTable12();
                 createTable13();
                 createTable14();
-                createTable15();
+                createTable3_15("<TABLE15>");
                 createTable16();
 
                 saveWord();
@@ -713,7 +713,7 @@ namespace TestWord
 
 
 
-        private void createTable3()
+        private void createTable3_15(string tag)
         {
             var dt = new DataTable();
             dt.Columns.Add(new DataColumn("Оцениваемые компетенции", typeof(string)));
@@ -730,7 +730,7 @@ namespace TestWord
                 dt.Rows.Add(dr);
             }
 
-            app.Selection.Find.Execute("<TABLE3>");
+            app.Selection.Find.Execute(tag);
             Word.Range wordRange = app.Selection.Range;
 
             var wordTable = wordDocument.Tables.Add(wordRange,
@@ -2138,22 +2138,168 @@ namespace TestWord
             }
         }
 
+        //11 материально техническая база
         private void createTable14()
         {
-
-
+            List<MaterialBaseModel> list_material = new List<MaterialBaseModel>()
+            {
+                new MaterialBaseModel(
+                    "Ул. Р. Фахретдина, 42. Учебный корпус В, аудитория В-207, (учебная аудитория для проведения занятий лекционного типа, практического типа, групповых и индивидуальных консультаций, текущего контроля и промежуточной аттестации, выполнения курсовых работ)", 
+                    new List<string>()
+                    {
+                        "Компьютер в комплекте с монитором ITCorp",
+                        "Проектор NEC",
+                        "Экран проекционный",
+                        "Принтер Pantum P2207",
+                    }
+                ),
+                new MaterialBaseModel(
+                    "Ул. Р. Фахретдина, 42. Учебный корпус В, аудитория В-138, (учебная аудитория для проведения занятий лекционного и практического типа, групповых и индивидуальных консультаций, текущего контроля и промежуточной аттестации)",
+                    new List<string>()
+                    {
+                        "Компьютер в комплекте с монитором ITCorp",
+                        "Проектор NEC",
+                        "Экран проекционный",
+                        "Принтер Pantum P2207",
+                        "Стенд лабораторный учебный",
+                        "Установка поверочная переносная УПП-3",
+                        "Установка для формирования и измерения давления МЛИ-4",
+                        "Установка для формирования и измерения температуры МЛИ -2",
+                        "Установка для формирования и измерения электрических величин МЛИ-3",
+                    }
+                ),
+                new MaterialBaseModel(
+                    "Ул. Р. Фахретдина, 42. Учебный корпус В, аудитория В-214 компьютерный (учебная аудитория для проведения текущего контроля и промежуточной аттестации, курсового проектирования, самостоятельной работы",
+                    new List<string>()
+                    {
+                        "Компьютер в комплекте с монитором IT Corp 3250 – 11 шт. с подключением к сети \"Интернет\" и обеспечением доступа в электронную информационно-образовательную среду института",
+                        "Проектор NEC",
+                        "Экран на штативе",
+                        "Принтер HP LJ P3015d",
+                        "Сканер Epson Perfection V33",
+                    }
+                ),
+                new MaterialBaseModel(
+                    "Ул. Р. Фахретдина, 42. Учебный корпус В, аудитория В-204,(учебная аудитория проведения занятий лекционного, лабораторного и практического типов, групповых и индивидуальных консультаций)",
+                    new List<string>()
+                    {
+                        "Компьютер в комплекте с монитором ITCorp",
+                        "Проектор NEC",
+                        "Экран проекционный",
+                        "Принтер Pantum P2207",
+                        "Стенд учебный «Электрические измерения и основы метрологии»",
+                    }
+                ),
+                new MaterialBaseModel(
+                    "Ул. Р. Фахретдина, 42. Учебный корпус В, аудитория В-216 (учебная аудитория для проведения занятий лекционного типа)",
+                    new List<string>()
+                    {
+                        "Компьютер в комплекте с монитором",
+                        "Проектор BenQ MW612",
+                        "Экран проекционный",
+                        "Экран с электроприводом",
+                    }
+                ),
+            };
+            int row = 1 + list_material.Count;
+            int column = 3;
+            app.Selection.Find.Execute("<TABLE14>");
+            Word.Range wordTableRange = app.Selection.Range;
+            Word.Table wordTable = wordDocument.Tables.Add(wordTableRange, row, column);
+            //форматирование
+            wordTable.Borders.Enable = Convert.ToInt32(true);
+            wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+            wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+            wordTable.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+            wordTable.Range.ParagraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
+            wordTable.Range.Font.Size = 12;
+            wordTable.Rows[1].Range.Bold = Convert.ToInt32(true);
+            wordTable.Cell(1, 1).Range.Text = "№ п/п";
+            wordTable.Cell(1, 2).Range.Text = "Наименование специальных* помещений и помещений для самостоятельной работы";
+            wordTable.Cell(1, 3).Range.Text = "Оснащенность специальных помещений и помещений для самостоятельной работы";
+            int current_row = 2;
+            for (int i = 0; i < list_material.Count; i++)
+            {
+                wordTable.Cell(current_row, 1).Range.Text = $"{i + 1}";
+                wordTable.Cell(current_row, 2).Range.Text = $"{list_material[i].room}";
+                wordTable.Cell(current_row, 3).Range.Text = $"{list_material[i].equipment}";
+                //форматирование
+                wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                wordTable.Cell(current_row, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                current_row++;
+            }
+            wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
         }
 
-        private void createTable15()
+        private class MaterialBaseModel
         {
+            public string room { get; set; }
+            public List<string> equipment { get; set; }
 
-
+            public MaterialBaseModel(string room, List<string> equipment)
+            {
+                this.room = room;
+                this.equipment = equipment;
+            }
         }
 
         private void createTable16()
         {
+            //Место дисциплины в структуру ОПОП ВО
+            string place = $"Б1.О.23. " +
+                "Дисциплина «Метрология, стандартизация и сертификация» входит в состав " +
+                "Блока 1 «Дисциплины (модули)» и относится к " +
+                "обязательной  части.\nДисциплина изучается на " +
+                "2 курсе в 4 семестре.";
+            //общая трудоемкость дисциплины (в зачетных единицах в часах)
+            string laboriousness = "Зачетных единиц по учебному плану: 4 ЗЕ.\n" +
+                "Часов по учебному плану: 144 ч.\n";
+            //виды учебной работы
+            string work = "Контактная работа обучающихся с преподавателем:\r\n" +
+                "- лекции 16 ч.;\r\n" +
+                "- практические занятия 18 ч.;\r\n" +
+                "- лабораторные работы 18 ч.\r\n" +
+                "Самостоятельная работа 20ч.\r\n" +
+                "Контроль (экзамен) 36 ч.\r\n";
+            //изучаемые темы (разделы)
+            string theme = "Тема 1. Основы метрологии\r\n" +
+                "Тема 2. Средства и методы измерения \r\n" +
+                "Тема 3. Погрешности измерения\r\n" +
+                "Тема 4. Основы стандартизации\r\n" +
+                "Тема 5. Основы сертификации\r\n";
+            //форма промежуточной аттестации
+            string attestation = "экзамен в 4 семестре";
+            Dictionary<string, string> tableData = new Dictionary<string, string>()
+            {
+                { "Место дисциплины в структуру ОПОП ВО", place},
+                { "Общая трудоемкость дисциплины (в зачетных единицах в часах)", laboriousness},
+                { "Виды учебной работы", work},
+                { "Изучаемые темы (разделы)", theme},
+                { "Форма промежуточной аттестации", attestation},
 
-
+            };
+            int row = tableData.Count;
+            int column = 2;
+            app.Selection.Find.Execute("<TABLE16>");
+            Word.Range wordTableRange = app.Selection.Range;
+            Word.Table wordTable = wordDocument.Tables.Add(wordTableRange, row, column);
+            //форматирование
+            wordTable.Borders.Enable = Convert.ToInt32(true);
+            wordTable.Range.ParagraphFormat.SpaceBefore = 0;
+            wordTable.Range.ParagraphFormat.SpaceAfter = 0;
+            wordTable.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphJustify;
+            wordTable.Range.ParagraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
+            wordTable.Range.Font.Size = 12;
+            int current_row = 1;
+            foreach (var item in tableData)
+            {
+                wordTable.Cell(current_row, 1).Range.Text = item.Key;
+                wordTable.Cell(current_row, 2).Range.Text = item.Value;
+                //форматирование
+                wordTable.Cell(current_row, 1).Range.Bold = Convert.ToInt32(true);
+                current_row++;
+            }
+            wordTable.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitContent);
         }
     }
 }
