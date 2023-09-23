@@ -121,6 +121,7 @@ namespace TestWord
             //данные - код, имя, знать, уметь, владеть, индикаторы
             //1 Перечень планируемых результатов обучения по дисциплине
             //6.2 Уровень освоения компетенций и критерии оценивания результатов обучения
+            //Аннотация
             List<CompetenceModel> competences = new List<CompetenceModel>(){
                 new CompetenceModel("ОПК-11",
                     "Способен проводить научные эксперименты с использованием современного исследовательского оборудования и приборов, оценивать результаты исследований",
@@ -2222,7 +2223,15 @@ namespace TestWord
             {
                 wordTable.Cell(current_row, 1).Range.Text = $"{i + 1}";
                 wordTable.Cell(current_row, 2).Range.Text = $"{list_material[i].room}";
-                wordTable.Cell(current_row, 3).Range.Text = $"{list_material[i].equipment}";
+                string equipment = "";
+                for (int j = 0; j < list_material[i].equipment.Count; j++)
+                {
+                    if (list_material[i].equipment.Count==1)
+                        equipment = list_material[i].equipment[j];
+                    else
+                        equipment = equipment + $"{j + 1}. {list_material[i].equipment[j]}\n";
+                }
+                wordTable.Cell(current_row, 3).Range.Text = equipment;
                 //форматирование
                 wordTable.Cell(current_row, 2).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
                 wordTable.Cell(current_row, 3).Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
